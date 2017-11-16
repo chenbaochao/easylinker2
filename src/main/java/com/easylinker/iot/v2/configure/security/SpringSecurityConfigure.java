@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 /**
  * Created by wwhai on 2017/11/15.
@@ -27,17 +26,12 @@ public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/user/login/",
                 "/logOut",
-                "/swagger-resources/**",
-                "/v2/api-docs",
                 "/loginPage",
                 "/static/**",
                 "/js/**",
                 "/css/**",
                 "/images/**",
-                "/assets/**",
-                "/new_index/**",
-                "/qrcode/**",
-                "/upload/**");
+                "/assets/**" );
     }
 
     @Override
@@ -47,12 +41,8 @@ public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
                 "/test",
                 "/index",
                 "/signupPage"
-                , "/loginFailed",
-                "/device/*",
-                "/apiv1/*",
-                "/ifUserExist",
-                "/qrcode/*",
-                "/h5console/*").permitAll();
+                , "/loginFailure"
+        ).permitAll();
         http.authorizeRequests().anyRequest().authenticated()
                 .and().formLogin().loginPage("/user/login")
                 .successHandler(new LoginSuccessHandler())
