@@ -1,7 +1,89 @@
 package com.easylinker.iot.v2.configure.security;
 
+import com.easylinker.iot.v2.configure.security.handler.AnonymousHandler;
+import com.easylinker.iot.v2.configure.security.handler.LoginFailureHandler;
+import com.easylinker.iot.v2.configure.security.handler.LoginSuccessHandler;
+import com.easylinker.iot.v2.service.AppUserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+
 /**
  * Created by wwhai on 2017/11/15.
  */
-public class SpringSecurityConfigure {
+public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    AppUserDetailService appUserDetailService;
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/user/login/",
+                "/logOut",
+                "/swagger-resources/**",
+                "/v2/api-docs",
+                "/loginPage",
+                "/static/**",
+                "/js/**",
+                "/css/**",
+                "/images/**",
+                "/assets/**",
+                "/new_index/**",
+                "/qrcode/**",
+                "/upload/**");
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers(
+                "/user/signup",
+                "/document",
+                "/index",
+                "/signupPage"
+                , "/loginFailed",
+                "/device/*",
+                "/apiv1/*",
+                "/ifUserExist",
+                "/qrcode/*",
+                "/h5console/*").permitAll();
+        http.authorizeRequests().anyRequest().authenticated()
+                .and().formLogin().loginPage("/user/login")
+                .successHandler(new LoginSuccessHandler())
+                .failureHandler(new LoginFailureHandler())
+                .usernameParameter("loginpara").passwordParameter("password")
+                .and().logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/index")
+                .permitAll()
+                .and().rememberMe()
+                .and().exceptionHandling()
+                .authenticationEntryPoint(new AnonymousHandler())
+                .and().csrf().disable();
+    }
+
+    @Bean
+    public Md5PasswordEncoder passwordEncoder() {
+        return new Md5PasswordEncoder();
+
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(customUserDetailsService());
+    }
+
+    /**
+     * 自定义UserDetailsService，从数据库中读取用户信息
+     *
+     * @return
+     */
+    @Bean
+    public AppUserDetailService customUserDetailsService() {
+        return new AppUserDetailService();
+    }
 }

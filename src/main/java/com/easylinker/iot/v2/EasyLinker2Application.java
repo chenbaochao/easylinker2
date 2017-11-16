@@ -7,6 +7,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 /**
  * 启动入口
@@ -17,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ServletComponentScan
 @SpringBootApplication
-
+@EnableWebSocket
 public class EasyLinker2Application {
 
     public static void main(String[] args) {
