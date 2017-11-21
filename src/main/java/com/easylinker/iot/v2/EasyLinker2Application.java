@@ -1,6 +1,5 @@
 package com.easylinker.iot.v2;
 
-import com.easylinker.iot.v2.annotation.ProjectInformation;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;

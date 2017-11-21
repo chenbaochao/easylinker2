@@ -9,13 +9,13 @@ package com.easylinker.iot.v2.configure.security.securityenum;
  */
 public enum SecurityCommonUrl {
     DEFAULT_INDEX("默认首页", "/"),
-    DEFAULT_LOGIN_PAGE("登录入口", "/user/login"),
+    DEFAULT_LOGIN_PAGE("登录入口", "/login"),
     DEFAULT_LOGOUT_PAGE("注销入口", "/logOutPage"),
     DEFAULT_STATIC_PATH("默认静态资源的路径", "/static/**"),
     DEFAULT_TEST_PATH("默认测试接口", "/test"),
     DEFAULT_USERNAME_NAME("默认的登录用户名的名称", "loginParam"),
     DEFAULT_PASSWORD_NAME("默认的登录密码的名称", "password"),
-    ;
+    DEFAULT_PDF_URL("默认的PDF输出目录", "/api/pdf");
 
     private String name;
     private String url;

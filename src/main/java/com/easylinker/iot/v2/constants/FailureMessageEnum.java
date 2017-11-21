@@ -7,6 +7,7 @@ public enum FailureMessageEnum {
 
     EXPIRED(1, "账户已过期!"),
     CREDIT_FAILED(2, "认证失败!"),
+
     USER_LOCKED(3, "用户被冻结！"),
     LOGIN_FAILED(4, "登录失败!"),
     REGISTER_FAILED(5, "注册失败！"),
@@ -17,7 +18,8 @@ public enum FailureMessageEnum {
     OPERATE_FAILED(10, "操作失败!"),
     REQUIRED_APIKEY(11, "没有APIKey"),
     FILE_DOWNLOAD_FAILED(12, "文件下载失败!"),
-    TOPIC_EXIST(13, "Topic已经存在，请不要重复添加！");
+    TOPIC_EXIST(13, "Topic已经存在，请不要重复添加！"),
+    NOT_AUTH(14, "账户已过期!");
 
     private int code;
     private String message;

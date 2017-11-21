@@ -1,5 +1,6 @@
 package com.easylinker.iot.v2.configure.security;
 
+import com.easylinker.iot.v2.configure.security.filter.CustomUsernamePasswordFilter;
 import com.easylinker.iot.v2.configure.security.handler.AnonymousHandler;
 import com.easylinker.iot.v2.configure.security.handler.LoginFailureHandler;
 import com.easylinker.iot.v2.configure.security.handler.LoginSuccessHandler;
@@ -22,11 +23,14 @@ public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
 
     private SecurityRouter securityRouter;
 
+    /**
+     * 这个用来配置一些默认的路由
+     */
     public SpringSecurityConfigure() {
         securityRouter = new SecurityRouter();
         securityRouter.addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_TEST_PATH.getUrl());
         securityRouter.addWebResourcesRouter(SecurityCommonUrl.DEFAULT_STATIC_PATH.getUrl());
-        securityRouter.addHttpSecurityRouter("/api/pdf");
+        securityRouter.addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_PDF_URL.getUrl());
 
     }
 
@@ -49,6 +53,7 @@ public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.addFilter(new CustomUsernamePasswordFilter());
         http.authorizeRequests().antMatchers(securityRouter.getHttpSecurityRouter()).permitAll();
         http.authorizeRequests().anyRequest().authenticated()
                 .and().formLogin().loginPage(SecurityCommonUrl.DEFAULT_LOGIN_PAGE.getUrl())
@@ -72,6 +77,10 @@ public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
 
     }
 
+    /**
+     * @param auth
+     * @throws Exception
+     */
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
