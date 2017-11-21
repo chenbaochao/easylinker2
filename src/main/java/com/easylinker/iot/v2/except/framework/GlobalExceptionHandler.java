@@ -1,4 +1,4 @@
-package com.easylinker.iot.v2.except;
+package com.easylinker.iot.v2.except.framework;
 
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
