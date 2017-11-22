@@ -1,5 +1,7 @@
 package com.easylinker.iot.v2.configure.security;
 
+import com.easylinker.iot.v2.configure.security.securityenum.SecurityCommonUrl;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,12 @@ public class SecurityRouter {
     public SecurityRouter() {
         webResourcesRouter = new ArrayList<>();
         httpSecurityRouter = new ArrayList<>();
+        addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_TEST_PATH.getUrl());
+        addWebResourcesRouter(SecurityCommonUrl.DEFAULT_STATIC_PATH.getUrl());
+        addWebResourcesRouter(SecurityCommonUrl.DEFAULT_PDF_URL.getUrl());
+        addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_USER_OPERATE_PATH.getUrl());
+        addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_USER_OPERATE_PATH.getUrl());
+        addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_AVATAR_PATH.getUrl());
     }
 
     public String[] getWebResourcesRouter() {

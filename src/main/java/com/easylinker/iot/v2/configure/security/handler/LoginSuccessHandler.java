@@ -2,7 +2,9 @@ package com.easylinker.iot.v2.configure.security.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
+import com.easylinker.iot.v2.model.AppUser;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
@@ -15,10 +17,15 @@ import java.io.IOException;
  * 登录成功处理器
  */
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         JSONObject returnJson = new JSONObject();
+        AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         returnJson.put("state", 1);
+        returnJson.put("data", appUser);
         returnJson.put("message", SuccessMessageEnum.LOGIN_SUCCESS);
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setCharacterEncoding("UTF-8");

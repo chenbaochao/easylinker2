@@ -19,6 +19,7 @@ public class AppUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String argument) throws UsernameNotFoundException {
+
         /**
          * 可以用Username Or Email Or Phone 登录
          */

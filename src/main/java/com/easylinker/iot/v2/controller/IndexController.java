@@ -1,10 +1,13 @@
 package com.easylinker.iot.v2.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.easylinker.iot.v2.annotation.EasyApi;
-import com.easylinker.iot.v2.annotation.EasyLinkerApiEntry;
-import com.easylinker.iot.v2.annotation.ProjectInformation;
+import com.easylinker.iot.v2.model.AppUser;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -12,16 +15,28 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/")
-@EasyLinkerApiEntry
-@ProjectInformation(name = "EasyLinker物联网项目", startTime = "2017", endTime = "2019", charger = "小明", remarks = "项目描述")
+@Api(value = "IndexController", description = "首页控制")
 public class IndexController {
     JSONObject jsonObject = new JSONObject();
 
-    @EasyApi(name = "测试方法", router = "/test", param = {"参数1", "参数2"}, author = "王文海")
-    @RequestMapping("/test")
-    public JSONObject test() {
+
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    @ApiOperation(value = "测试API", notes = "这个是用来测试的", response = AppUser.class, httpMethod = "POST")
+    @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input", response = AppUser.class)})
+
+    public JSONObject testPost() {
         jsonObject.put("message", "Test成功");
         return jsonObject;
     }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @ApiOperation(value = "测试API", notes = "这个是用来测试的", response = AppUser.class, httpMethod = "GET")
+    @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input", response = AppUser.class)})
+
+    public JSONObject testGet() {
+        jsonObject.put("message", "Test成功");
+        return jsonObject;
+    }
+
 
 }

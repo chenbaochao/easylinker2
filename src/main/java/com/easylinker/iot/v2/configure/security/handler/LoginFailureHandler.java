@@ -19,7 +19,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler{
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         JSONObject returnJson = new JSONObject();
         returnJson.put("state", 0);
-        returnJson.put("message", FailureMessageEnum.LOGIN_ERROR);
+        returnJson.put("message", FailureMessageEnum.LOGIN_FAILED);
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.getWriter().write(returnJson.toJSONString());

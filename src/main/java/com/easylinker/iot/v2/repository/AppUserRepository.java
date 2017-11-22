@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AppUserRepository extends JpaRepository<AppUser, String> {
     AppUser findTop1ByUsernameOrEmailOrPhone(String parame, String parame1, String parame2);
+
+    AppUser findTop1ByUsername(String username);
 }

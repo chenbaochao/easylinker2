@@ -4,9 +4,9 @@ import com.easylinker.iot.v2.configure.security.filter.CustomUsernamePasswordFil
 import com.easylinker.iot.v2.configure.security.handler.AnonymousHandler;
 import com.easylinker.iot.v2.configure.security.handler.LoginFailureHandler;
 import com.easylinker.iot.v2.configure.security.handler.LoginSuccessHandler;
+import com.easylinker.iot.v2.configure.security.handler.UserLogoutSuccessHandler;
 import com.easylinker.iot.v2.configure.security.securityenum.SecurityCommonUrl;
 import com.easylinker.iot.v2.service.AppUserDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
@@ -21,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
 
+
     private SecurityRouter securityRouter;
 
     /**
@@ -28,10 +29,6 @@ public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
      */
     public SpringSecurityConfigure() {
         securityRouter = new SecurityRouter();
-        securityRouter.addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_TEST_PATH.getUrl());
-        securityRouter.addWebResourcesRouter(SecurityCommonUrl.DEFAULT_STATIC_PATH.getUrl());
-        securityRouter.addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_PDF_URL.getUrl());
-
     }
 
     /**
@@ -40,6 +37,7 @@ public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(securityRouter.getWebResourcesRouter());
+        web.ignoring().antMatchers(SecurityCommonUrl.SWAGGER_UI_MATCHER);
 
     }
 
@@ -53,17 +51,12 @@ public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilter(new CustomUsernamePasswordFilter());
+        http.addFilter(getCustomUsernamePasswordFilter());
         http.authorizeRequests().antMatchers(securityRouter.getHttpSecurityRouter()).permitAll();
         http.authorizeRequests().anyRequest().authenticated()
-                .and().formLogin().loginPage(SecurityCommonUrl.DEFAULT_LOGIN_PAGE.getUrl())
-                .successHandler(new LoginSuccessHandler())
-                .failureHandler(new LoginFailureHandler())
-                .usernameParameter(SecurityCommonUrl.DEFAULT_USERNAME_NAME.getUrl())
-                .passwordParameter(SecurityCommonUrl.DEFAULT_PASSWORD_NAME.getUrl())
-                .and().logout()
-                .logoutUrl(SecurityCommonUrl.DEFAULT_LOGOUT_PAGE.getUrl())
-                .logoutSuccessUrl(SecurityCommonUrl.DEFAULT_INDEX.getUrl())
+                .and().formLogin().disable().httpBasic().disable()
+                .logout()
+                .logoutSuccessHandler(new UserLogoutSuccessHandler())
                 .permitAll()
                 .and().rememberMe()
                 .and().exceptionHandling()
@@ -82,8 +75,10 @@ public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
      * @throws Exception
      */
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        super.configure(auth);
+
         auth.userDetailsService(customUserDetailsService());
     }
 
@@ -95,6 +90,15 @@ public class SpringSecurityConfigure extends WebSecurityConfigurerAdapter {
     @Bean
     public AppUserDetailService customUserDetailsService() {
         return new AppUserDetailService();
+    }
+
+    @Bean
+    public CustomUsernamePasswordFilter getCustomUsernamePasswordFilter() throws Exception {
+        CustomUsernamePasswordFilter customUsernamePasswordFilter = new CustomUsernamePasswordFilter();
+        customUsernamePasswordFilter.setAuthenticationManager(super.authenticationManager());
+        customUsernamePasswordFilter.setAuthenticationFailureHandler(new LoginFailureHandler());
+        customUsernamePasswordFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler());
+        return customUsernamePasswordFilter;
     }
 
 }

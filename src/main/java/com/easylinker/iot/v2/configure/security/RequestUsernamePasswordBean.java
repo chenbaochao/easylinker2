@@ -18,12 +18,12 @@ public class RequestUsernamePasswordBean {
     private String username;
     private String password;
 
-    public String getUserrname() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUserrname(String userrname) {
-        this.username = userrname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -34,24 +34,36 @@ public class RequestUsernamePasswordBean {
         this.password = password;
     }
 
-    public RequestUsernamePasswordBean(HttpServletRequest httpServletRequest) throws Exception {
-        BufferedReader bufferedReader = new BufferedReader(
-                new BufferedReader(
-                        new InputStreamReader(httpServletRequest.getInputStream())));
-        if (httpServletRequest.getMethod().equals("POST")) {
-            String tempLine = "";
-            StringBuffer jsonStringBuffer = new StringBuffer();
-            while ((tempLine = bufferedReader.readLine()) != null) {
-                jsonStringBuffer.append(tempLine);
-            }
-            JSONObject jsonObject = JSONObject.parseObject(jsonStringBuffer.toString());
-            String username = jsonObject.get(USERNAME_PARAM).toString();
-            String password = jsonObject.get(PASSWORD_PARAM).toString();
-            this.setUserrname(username);
-            this.setPassword(password);
+    public RequestUsernamePasswordBean(HttpServletRequest httpServletRequest) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(
+                    new BufferedReader(
+                            new InputStreamReader(httpServletRequest.getInputStream())));
+            if (httpServletRequest.getMethod().equals("POST")) {
+                String tempLine = "";
+                StringBuffer jsonStringBuffer = new StringBuffer();
+                while ((tempLine = bufferedReader.readLine()) != null) {
+                    jsonStringBuffer.append(tempLine);
+                }
+                JSONObject jsonObject = JSONObject.parseObject(jsonStringBuffer.toString());
+                String username = jsonObject.get(USERNAME_PARAM).toString();
+                String password = jsonObject.get(PASSWORD_PARAM).toString();
+                if (username == null) {
+                    username = "";
+                }
 
-        } else {
-            throw new Exception("Only POST method can be support!");
+                if (password == null) {
+                    password = "";
+                }
+                this.setUsername(username);
+                this.setPassword(password);
+
+            } else {
+                throw new Exception("Only POST method can be support REST!");
+            }
+
+        } catch (Exception e) {
+            System.err.println("RequestBean param error!");
         }
 
     }

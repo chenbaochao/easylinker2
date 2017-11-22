@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by wwhai on 2017/11/18.
  */
-@Component
+//@Component
 public class APIContextAware implements ApplicationContextAware {
     StringBuffer stringBuffer = new StringBuffer();
 
