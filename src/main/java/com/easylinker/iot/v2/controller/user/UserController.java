@@ -26,6 +26,14 @@ public class UserController {
     @Autowired
     AppUserRepository appUserRepository;
 
+    @ApiOperation(value = "测试", notes = "测试", httpMethod = "GET")
+    @RequestMapping(value = "/user/test", method = RequestMethod.GET)
+    public JSONObject test() {
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("state", "0");
+        resultJson.put("message", "testOk");
+        return resultJson;
+    }
 
     @ApiOperation(value = "增加一个用户", notes = "增加一个用户", httpMethod = "POST")
     @RequestMapping(value = "/user", method = RequestMethod.POST)
@@ -149,12 +157,43 @@ public class UserController {
         return resultJson;
     }
 
-    @ApiOperation(value = "测试", notes = "测试", httpMethod = "GET")
-    @RequestMapping(value = "/user/test", method = RequestMethod.GET)
-    public JSONObject test() {
+    /**
+     * 设备操作相关
+     *
+     * @param deviceParamMap
+     * @return
+     */
+
+    @ApiOperation(value = "增加一个设备", notes = "增加一个设备", httpMethod = "POST")
+    @RequestMapping(value = "/user/device", method = RequestMethod.POST)
+    public JSONObject addDevice(@PathVariable Map<String, String> deviceParamMap) {
         JSONObject resultJson = new JSONObject();
-        resultJson.put("state", "0");
-        resultJson.put("message", "testOk");
         return resultJson;
+
     }
+
+    @ApiOperation(value = "查找一个设备", notes = "查找增加一个设备", httpMethod = "GET")
+    @RequestMapping(value = "/user/device", method = RequestMethod.GET)
+    public JSONObject findDevice(@PathVariable String deviceId) {
+        JSONObject resultJson = new JSONObject();
+        return resultJson;
+
+    }
+
+    @ApiOperation(value = "删除一个设备", notes = "删除一个设备", httpMethod = "DELETE")
+    @RequestMapping(value = "/user/device", method = RequestMethod.DELETE)
+    public JSONObject deleteDevice(@PathVariable String deviceId) {
+        JSONObject resultJson = new JSONObject();
+        return resultJson;
+
+    }
+
+    @ApiOperation(value = "更新一个设备", notes = "更新一个设备", httpMethod = "PUT")
+    @RequestMapping(value = "/user/device", method = RequestMethod.PUT)
+    public JSONObject updateDevice(@PathVariable Map<String, String> deviceParamMap) {
+        JSONObject resultJson = new JSONObject();
+        return resultJson;
+
+    }
+
 }
