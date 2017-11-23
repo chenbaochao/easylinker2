@@ -92,8 +92,39 @@ public class UserController {
 
     @ApiOperation(value = "更新一个用户", notes = "更新一个用户", httpMethod = "PUT")
     @RequestMapping(value = "/user", method = RequestMethod.PUT)
-    public JSONObject updateUser() {
+    public JSONObject updateUser(@RequestBody(required = false) Map<String, String> userParamMap) {
         JSONObject resultJson = new JSONObject();
+        try {
+            String userId = userParamMap.get("userId");
+            username = userParamMap.get("username");
+            email = userParamMap.get("email");
+            phone = userParamMap.get("phone");
+            /**
+             * 排除非空
+             */
+            if (username.equals("") || email.equals("") || phone.equals("")) {
+                resultJson.put("state", 0);
+                resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+            } else {
+                AppUser appUser = appUserRepository.findOne(userId);
+                if (appUser != null) {
+                    appUser.setUsername(username);
+                    appUser.setPhone(phone);
+                    appUser.setEmail(email);
+                    appUserRepository.save(appUser);
+                    resultJson.put("state", 1);
+                    resultJson.put("data", appUser);
+                    resultJson.put("message", SuccessMessageEnum.OPERATE_SUCCESS);
+                } else {
+                    resultJson.put("state", 0);
+                    resultJson.put("message", FailureMessageEnum.USER_NOT_EXIST);
+                }
+
+            }
+        } catch (Exception e) {
+            resultJson.put("state", 0);
+            resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+        }
 
         return resultJson;
     }
@@ -126,19 +157,4 @@ public class UserController {
         resultJson.put("message", "testOk");
         return resultJson;
     }
-
-//    public static void main(String[] args) {
-//        String username = "";
-//        String password = "password";
-//        Assert.hasLength(username, "error");
-//        Assert.hasLength(password, "error");
-//
-//        if (username.equals("") || password.equals("")) {
-//            System.out.println("sssss");
-//        } else {
-//            System.out.println("bbbbb");
-//        }
-//
-//
-//    }
 }

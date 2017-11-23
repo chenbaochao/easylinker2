@@ -30,9 +30,19 @@ public class AppUser extends BaseEntity implements UserDetails {
     private boolean isAccountNonLocked = true;
     private boolean isCredentialsNonExpired = true;
     private boolean isEnabled = true;
-    @OneToMany(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Role> role;
 
+    @OneToMany(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Role> role = new ArrayList<>();
+
+
+    public List<Role> getRole() {
+        role.add(new Role("USER", "普通用户", "USER"));
+        return role;
+    }
+
+    public void setRole(List<Role> role) {
+        this.role = role;
+    }
 
     public String getAvatar() {
         return avatar;
@@ -53,6 +63,9 @@ public class AppUser extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        /**
+         * 默认给了一个普通用户
+         */
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         simpleGrantedAuthorities.add(new SimpleGrantedAuthority("USER"));
         return simpleGrantedAuthorities;

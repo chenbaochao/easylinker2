@@ -2,8 +2,7 @@ package com.easylinker.iot.v2.model;
 
 import com.easylinker.iot.v2.model.base.BaseEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by wwhai on 2017/11/15.
@@ -25,8 +24,9 @@ import javax.persistence.Table;
 public class Device extends BaseEntity {
     private String openId;
     private String deviceName;
-    private String deviceGroup;
     private String deviceDescribe;
+    @ManyToOne(targetEntity = DeviceGroup.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private DeviceGroup deviceGroup = new DeviceGroup("默认分组", 1);
 
     public String getOpenId() {
         return openId;
@@ -42,14 +42,6 @@ public class Device extends BaseEntity {
 
     public void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
-    }
-
-    public String getDeviceGroup() {
-        return deviceGroup;
-    }
-
-    public void setDeviceGroup(String deviceGroup) {
-        this.deviceGroup = deviceGroup;
     }
 
     public String getDeviceDescribe() {
