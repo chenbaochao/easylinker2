@@ -21,7 +21,7 @@ public class SecurityRouter {
         addWebResourcesRouter(SecurityCommonUrl.DEFAULT_PDF_URL.getUrl());
         addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_USER_OPERATE_PATH.getUrl());
         addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_USER_OPERATE_PATH.getUrl());
-        addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_AVATAR_PATH.getUrl());
+        addWebResourcesRouter(SecurityCommonUrl.DEFAULT_AVATAR_PATH.getUrl());
     }
 
     public String[] getWebResourcesRouter() {

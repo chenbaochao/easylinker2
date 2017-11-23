@@ -6,6 +6,8 @@ package com.easylinker.iot.v2.constants;
 public enum SuccessMessageEnum {
     LOGIN_SUCCESS(1, "登录成功!"),
     REGISTER_SUCCESS(2, "登录成功!"),
+    OPERATE_SUCCESS(4, "查询成功"),
+
     LOG_OUT_SUCCESS(3, "注销成功!");
 
 

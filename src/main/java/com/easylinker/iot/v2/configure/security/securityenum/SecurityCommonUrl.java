@@ -8,7 +8,7 @@ package com.easylinker.iot.v2.configure.security.securityenum;
  * 这个是对SpringSecurity的默认的URL的一些封装
  */
 public enum SecurityCommonUrl {
-    DEFAULT_USER_OPERATE_PATH("注册入口", "/user/**"),
+    DEFAULT_USER_OPERATE_PATH("注册入口", "/user/register"),
     DEFAULT_STATIC_PATH("默认静态资源的路径", "/static/**"),
     DEFAULT_AVATAR_PATH("默认头像的路径", "/avatar/**"),
     DEFAULT_TEST_PATH("默认测试接口", "/test"),

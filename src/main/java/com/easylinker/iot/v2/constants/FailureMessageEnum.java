@@ -20,6 +20,8 @@ public enum FailureMessageEnum {
     FILE_DOWNLOAD_FAILED(12, "文件下载失败!"),
     INVALID_PARAM(13, "必填字段缺少！"),
     USER_EXIST(13, "用户已经存在，请不要重复添加！"),
+    OPERATE_FAILURE(15, "操作失败！"),
+
     NOT_AUTH(14, "账户已过期!");
 
     private int code;

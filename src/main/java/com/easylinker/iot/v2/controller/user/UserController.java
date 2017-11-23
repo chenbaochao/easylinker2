@@ -8,10 +8,7 @@ import com.easylinker.iot.v2.repository.AppUserRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -28,13 +25,12 @@ public class UserController {
     String phone;
     @Autowired
     AppUserRepository appUserRepository;
-    private JSONObject resultJson = new JSONObject();
 
 
     @ApiOperation(value = "增加一个用户", notes = "增加一个用户", httpMethod = "POST")
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public JSONObject addUser(@RequestBody(required = false) Map<String, String> loginParamMap) {
-
+        JSONObject resultJson = new JSONObject();
         /**
          * Map 提取参数的时候可能会抛出异常，所以进行异常捕获
          */
@@ -97,14 +93,37 @@ public class UserController {
     @ApiOperation(value = "更新一个用户", notes = "更新一个用户", httpMethod = "PUT")
     @RequestMapping(value = "/user", method = RequestMethod.PUT)
     public JSONObject updateUser() {
+        JSONObject resultJson = new JSONObject();
 
         return resultJson;
     }
 
     @ApiOperation(value = "查找一个用户", notes = "查询一个用户", httpMethod = "GET")
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public JSONObject findUser() {
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    public JSONObject findUser(@PathVariable String userId) {
+        JSONObject resultJson = new JSONObject();
+        if (userId != null) {
+            AppUser appUser = appUserRepository.findOne(userId);
+            if (appUser != null) {
+                resultJson.put("state", 1);
+                resultJson.put("data", appUser);
+                resultJson.put("message", SuccessMessageEnum.OPERATE_SUCCESS);
+            }
+        } else {
+            resultJson.put("state", 0);
+            resultJson.put("message", FailureMessageEnum.OPERATE_FAILED);
+        }
 
+
+        return resultJson;
+    }
+
+    @ApiOperation(value = "测试", notes = "测试", httpMethod = "GET")
+    @RequestMapping(value = "/user/test", method = RequestMethod.GET)
+    public JSONObject test() {
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("state", "0");
+        resultJson.put("message", "testOk");
         return resultJson;
     }
 
