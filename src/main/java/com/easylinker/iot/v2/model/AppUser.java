@@ -32,17 +32,12 @@ public class AppUser extends BaseEntity implements UserDetails {
     private boolean isEnabled = true;
 
     @OneToMany(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Role> role = new ArrayList<>();
+    private List<Role> roleList = new ArrayList<>();
 
-
-    public List<Role> getRole() {
-        role.add(new Role("USER", "普通用户", "USER"));
-        return role;
+    public AppUser() {
+        roleList.add(new Role("USER", "普通用户", 1));
     }
 
-    public void setRole(List<Role> role) {
-        this.role = role;
-    }
 
     public String getAvatar() {
         return avatar;

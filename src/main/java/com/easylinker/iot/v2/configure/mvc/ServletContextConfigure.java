@@ -30,6 +30,9 @@ public class ServletContextConfigure extends WebMvcConfigurationSupport {
 
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+        registry.addResourceHandler("/avatar/**")
+                .addResourceLocations("classpath:/META-INF/resources/avatar/");
     }
 
 

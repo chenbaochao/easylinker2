@@ -1,9 +1,10 @@
 package com.easylinker.iot.v2.model;
 
 import com.easylinker.iot.v2.model.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by wwhai on 2017/11/23.
@@ -17,9 +18,21 @@ import javax.persistence.Table;
  */
 public class DeviceGroup extends BaseEntity {
     private String name;
-    private Integer serialNumber;
+    private Long serialNumber = System.currentTimeMillis();
 
-    public DeviceGroup(String name, Integer serialNumber) {
+    @JsonIgnore
+    @OneToMany(targetEntity = Device.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Device> deviceList;
+
+    public List<Device> getDeviceList() {
+        return deviceList;
+    }
+
+    public void setDeviceList(List<Device> deviceList) {
+        this.deviceList = deviceList;
+    }
+
+    public DeviceGroup(String name, Long serialNumber) {
         this.name = name;
         this.serialNumber = serialNumber;
     }
@@ -28,11 +41,11 @@ public class DeviceGroup extends BaseEntity {
 
     }
 
-    public Integer getSerialNumber() {
+    public Long getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(Integer serialNumber) {
+    public void setSerialNumber(Long serialNumber) {
         this.serialNumber = serialNumber;
     }
 

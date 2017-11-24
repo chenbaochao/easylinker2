@@ -4,12 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.FailureMessageEnum;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
 import com.easylinker.iot.v2.model.AppUser;
+import com.easylinker.iot.v2.model.Device;
+import com.easylinker.iot.v2.model.DeviceGroup;
 import com.easylinker.iot.v2.repository.AppUserRepository;
+import com.easylinker.iot.v2.repository.DeviceGroupRepository;
+import com.easylinker.iot.v2.repository.DeviceRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +30,11 @@ public class UserController {
     String phone;
     @Autowired
     AppUserRepository appUserRepository;
+    @Autowired
+    DeviceRepository deviceRepository;
+    @Autowired
+    DeviceGroupRepository deviceGroupRepository;
+
 
     @ApiOperation(value = "测试", notes = "测试", httpMethod = "GET")
     @RequestMapping(value = "/user/test", method = RequestMethod.GET)
@@ -110,7 +120,8 @@ public class UserController {
             /**
              * 排除非空
              */
-            if (username.equals("") || email.equals("") || phone.equals("")) {
+            if (userId.equals("") ||
+                    username.equals("") || email.equals("") || phone.equals("")) {
                 resultJson.put("state", 0);
                 resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
             } else {
@@ -163,37 +174,209 @@ public class UserController {
      * @param deviceParamMap
      * @return
      */
-
     @ApiOperation(value = "增加一个设备", notes = "增加一个设备", httpMethod = "POST")
     @RequestMapping(value = "/user/device", method = RequestMethod.POST)
-    public JSONObject addDevice(@PathVariable Map<String, String> deviceParamMap) {
+    public JSONObject addDevice(Map<String, String> deviceParamMap) {
         JSONObject resultJson = new JSONObject();
+        if (deviceParamMap.equals(null)) {
+            resultJson.put("state", 0);
+            resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+        } else {
+            try {
+                String deviceName = deviceParamMap.get("deviceName");
+                String deviceDescribe = deviceParamMap.get("deviceDescribe");
+                String groupSerialNumber = deviceParamMap.get("groupSerialNumber");
+                DeviceGroup deviceGroup = deviceGroupRepository.findTopBySerialNumber(groupSerialNumber);
+                if (deviceGroup != null) {//判断是否存在分组
+                    Device device = new Device();
+                    device.setDeviceName(deviceName);
+                    device.setDeviceDescribe(deviceDescribe);
+                    device.setDeviceGroup(deviceGroup);
+                    deviceRepository.save(device);
+                    resultJson.put("state", 1);
+                    resultJson.put("data", device);
+                    resultJson.put("message", SuccessMessageEnum.DEVICE_ADD_SUCCESS);
+
+                } else {//分组不存在
+                    resultJson.put("state", 0);
+                    resultJson.put("message", FailureMessageEnum.DEVICE_GROUP_NOT_EXIST);
+                }
+
+
+            } catch (Exception e) {
+                resultJson.put("state", 0);
+                resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+
+            }
+        }
+
+
         return resultJson;
 
     }
 
     @ApiOperation(value = "查找一个设备", notes = "查找增加一个设备", httpMethod = "GET")
-    @RequestMapping(value = "/user/device", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/device/{deviceId}", method = RequestMethod.GET)
     public JSONObject findDevice(@PathVariable String deviceId) {
         JSONObject resultJson = new JSONObject();
+        if (deviceId.equals(null)) {
+            deviceId = "";
+        }
+        Device device = deviceRepository.findOne(deviceId);
+        if (device != null) {
+            resultJson.put("state", 1);
+            resultJson.put("message", SuccessMessageEnum.OPERATE_SUCCESS);
+            resultJson.put("data", device);
+
+        } else {
+            resultJson.put("state", 0);
+            resultJson.put("message", FailureMessageEnum.DEVICE_NOT_EXIST);
+        }
         return resultJson;
 
     }
 
     @ApiOperation(value = "删除一个设备", notes = "删除一个设备", httpMethod = "DELETE")
-    @RequestMapping(value = "/user/device", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user/device/{deviceId}", method = RequestMethod.DELETE)
     public JSONObject deleteDevice(@PathVariable String deviceId) {
         JSONObject resultJson = new JSONObject();
-        return resultJson;
+        Device device = deviceRepository.findOne(deviceId);
+        if (device != null) {
+            deviceRepository.delete(device);
+            resultJson.put("state", 1);
+            resultJson.put("message", SuccessMessageEnum.OPERATE_SUCCESS);
 
+        } else {
+            resultJson.put("state", 0);
+            resultJson.put("message", FailureMessageEnum.DEVICE_NOT_EXIST);
+        }
+        return resultJson;
     }
 
     @ApiOperation(value = "更新一个设备", notes = "更新一个设备", httpMethod = "PUT")
     @RequestMapping(value = "/user/device", method = RequestMethod.PUT)
-    public JSONObject updateDevice(@PathVariable Map<String, String> deviceParamMap) {
+    public JSONObject updateDevice(Map<String, String> deviceParamMap) {
         JSONObject resultJson = new JSONObject();
+        try {
+            String deviceId = deviceParamMap.get("deviceId");
+            String deviceDescribe = deviceParamMap.get("deviceDescribe");
+            String deviceName = deviceParamMap.get("deviceName");
+            String groupSerialNumber = deviceParamMap.get("groupSerialNumber");
+            DeviceGroup deviceGroup = deviceGroupRepository.findTopBySerialNumber(groupSerialNumber);
+            if (deviceGroup != null) {//判断是否存在分组
+                Device device = deviceRepository.findOne(deviceId);
+                device.setDeviceName(deviceName);
+                device.setDeviceDescribe(deviceDescribe);
+                device.setDeviceGroup(deviceGroup);
+                deviceRepository.save(device);
+                resultJson.put("state", 1);
+                resultJson.put("data", device);
+                resultJson.put("message", SuccessMessageEnum.DEVICE_ADD_SUCCESS);
+
+            } else {//分组不存在
+                resultJson.put("state", 0);
+                resultJson.put("message", FailureMessageEnum.DEVICE_GROUP_NOT_EXIST);
+            }
+
+
+        } catch (Exception e) {
+            resultJson.put("state", 0);
+            resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+
+        }
+
         return resultJson;
 
     }
 
+    /**
+     * 设备组处理相关
+     */
+
+    /**
+     * 增加分组
+     */
+
+    @ApiOperation(value = "增加分组", notes = "增加分组", httpMethod = "POST")
+    @RequestMapping(value = "/user/device/group/{groupName}", method = RequestMethod.POST)
+    public JSONObject addGroup(@PathVariable String groupName) throws Exception {
+        JSONObject resultJson = new JSONObject();
+        groupName = new String(groupName.getBytes("GBK"), "utf-8");
+        if (groupName.equals("") || groupName.equals(null)) {
+            resultJson.put("state", 0);
+            resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+        } else {
+            /**
+             * 是否存在
+             */
+            if (deviceGroupRepository.findTopByName(groupName) != null) {
+                resultJson.put("state", 0);
+                resultJson.put("message", SuccessMessageEnum.DEVICE_GROUP_EXIST);
+            } else {
+                DeviceGroup deviceGroup = new DeviceGroup();
+                deviceGroup.setName(groupName);
+                deviceGroupRepository.save(deviceGroup);
+                resultJson.put("state", 1);
+                resultJson.put("data", deviceGroup);
+                resultJson.put("message", SuccessMessageEnum.DEVICE_GROUP_ADD_SUCCESS);
+            }
+
+        }
+
+        return resultJson;
+
+
+    }
+
+    /**
+     * 删除分组
+     */
+    @ApiOperation(value = "删除分组", notes = "删除分组", httpMethod = "DELETE")
+    @RequestMapping(value = "/user/device/group/{groupId}", method = RequestMethod.DELETE)
+    public JSONObject deleteGroup(@PathVariable String groupId) {
+        JSONObject resultJson = new JSONObject();
+        if (groupId.equals("")) {
+            resultJson.put("state", 0);
+            resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+        } else {
+            /**
+             * 是否存在
+             */
+            DeviceGroup deviceGroup = deviceGroupRepository.findOne(groupId);
+            if (deviceGroup == null) {
+                resultJson.put("state", 0);
+                resultJson.put("message", FailureMessageEnum.DEVICE_GROUP_NOT_EXIST);
+            } else {
+                deviceGroupRepository.delete(deviceGroup);
+                resultJson.put("state", 1);
+                resultJson.put("message", SuccessMessageEnum.DEVICE_GROUP_DELETE_SUCCESS);
+            }
+
+        }
+
+        return resultJson;
+    }
+
+    /**
+     * 分组列表
+     */
+    @ApiOperation(value = "分组列表", notes = "分组列表", httpMethod = "GET")
+    @RequestMapping(value = "/user/device/groups", method = RequestMethod.GET)
+    public JSONObject groups() {
+        JSONObject resultJson = new JSONObject();
+        List<DeviceGroup> deviceGroupList = deviceGroupRepository.findAll();
+
+        if (deviceGroupList.size() > 0) {
+            resultJson.put("state", 1);
+            resultJson.put("data", deviceGroupList);
+            resultJson.put("message", SuccessMessageEnum.OPERATE_SUCCESS);
+        } else {
+            resultJson.put("state", 0);
+            resultJson.put("message", FailureMessageEnum.EMPTY_DATA_SET);
+
+        }
+
+        return resultJson;
+
+    }
 }

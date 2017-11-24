@@ -9,24 +9,21 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "DEVICE")
-/**
- CREATE TABLE `mqtt_user` (
- `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
- `username` varchar(100) DEFAULT NULL,
- `password` varchar(100) DEFAULT NULL,
- `salt` varchar(35) DEFAULT NULL,
- `is_superuser` tinyint(1) DEFAULT 0,
- `created` datetime DEFAULT NULL,
- PRIMARY KEY (`id`),
- UNIQUE KEY `mqtt_username` (`username`)
- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
- */
+
 public class Device extends BaseEntity {
     private String openId;
     private String deviceName;
     private String deviceDescribe;
-    @ManyToOne(targetEntity = DeviceGroup.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private DeviceGroup deviceGroup = new DeviceGroup("默认分组", 1);
+    @ManyToOne(targetEntity = DeviceGroup.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private DeviceGroup deviceGroup = new DeviceGroup("DEFAULT_GROUP_"+System.currentTimeMillis(), 1L);
+
+    public DeviceGroup getDeviceGroup() {
+        return deviceGroup;
+    }
+
+    public void setDeviceGroup(DeviceGroup deviceGroup) {
+        this.deviceGroup = deviceGroup;
+    }
 
     public String getOpenId() {
         return openId;
