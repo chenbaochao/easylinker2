@@ -1,6 +1,8 @@
 package com.easylinker.iot.v2.repository;
 
 import com.easylinker.iot.v2.model.Device;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -8,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface DeviceRepository extends JpaRepository<Device, String> {
     Device findTopByDeviceName(String deviceName);
+
+    Page<Device> findAll(Pageable pageable);
 }

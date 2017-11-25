@@ -13,6 +13,9 @@ import com.easylinker.iot.v2.utils.QRCodeGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -179,7 +182,7 @@ public class UserController {
     @RequestMapping(value = "/user/device", method = RequestMethod.POST)
     public JSONObject addDevice(@RequestBody Map<String, String> deviceParamMap) {
         JSONObject resultJson = new JSONObject();
-        if (deviceParamMap.equals(null)) {
+        if (deviceParamMap == null) {
             resultJson.put("state", 0);
             resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
         } else {
@@ -229,7 +232,7 @@ public class UserController {
     @RequestMapping(value = "/user/device/{deviceId}", method = RequestMethod.GET)
     public JSONObject findDevice(@PathVariable String deviceId) {
         JSONObject resultJson = new JSONObject();
-        if (deviceId.equals(null)) {
+        if (deviceId == null) {
             deviceId = "";
         }
         Device device = deviceRepository.findOne(deviceId);
@@ -317,7 +320,7 @@ public class UserController {
             String groupName = groupNameParamMap.get("groupName");
 
 
-            if (groupName.equals("") || groupName.equals(null)) {
+            if (groupName.equals("") || (groupName == null)) {
                 resultJson.put("state", 0);
                 resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
             } else {
@@ -399,4 +402,39 @@ public class UserController {
         return resultJson;
 
     }
+
+
+    /**
+     * 设备列表
+     */
+    @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "GET")
+    @RequestMapping(value = "/user/device/devices/{pageNumber}/{pageSize}", method = RequestMethod.GET)
+    public JSONObject devices(@PathVariable Integer pageNumber, @PathVariable Integer pageSize) {
+        JSONObject resultJson = new JSONObject();
+        if (pageNumber == null || pageSize == null) {
+            resultJson.put("state", 0);
+            resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+        } else {
+            try {
+                Page<Device> devicePage = deviceRepository.findAll(new PageRequest(pageNumber, pageSize, new Sort(Sort.Direction.DESC, "id")));
+                if (devicePage != null) {
+                    resultJson.put("state", 1);
+                    resultJson.put("data", devicePage);
+                    resultJson.put("message", SuccessMessageEnum.OPERATE_SUCCESS);
+                } else {
+                    resultJson.put("state", 0);
+                    resultJson.put("message", FailureMessageEnum.EMPTY_DATA_SET);
+                }
+
+            } catch (Exception e) {
+                resultJson.put("state", 0);
+                resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+            }
+        }
+
+
+        return resultJson;
+
+    }
+
 }
