@@ -1,4 +1,4 @@
-package com.easylinker.iot.v2.controller;
+package com.easylinker.iot.v2.controller.front;
 
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.model.AppUser;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/")
-@Api(value = "首页控制", description = "首页控制")
+@Api(value = "网站首页控制", description = "首页控制")
 public class IndexController {
     JSONObject jsonObject = new JSONObject();
 

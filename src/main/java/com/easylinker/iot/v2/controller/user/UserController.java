@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.FailureMessageEnum;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
 import com.easylinker.iot.v2.model.AppUser;
-import com.easylinker.iot.v2.model.Device;
-import com.easylinker.iot.v2.model.DeviceGroup;
+import com.easylinker.iot.v2.model.device.Device;
+import com.easylinker.iot.v2.model.device.DeviceGroup;
 import com.easylinker.iot.v2.repository.AppUserRepository;
 import com.easylinker.iot.v2.repository.DeviceGroupRepository;
 import com.easylinker.iot.v2.repository.DeviceRepository;
@@ -105,12 +105,6 @@ public class UserController {
         return resultJson;
     }
 
-//    @ApiOperation(value = "删除一个用户", notes = "删除一个用户", httpMethod = "DELETE")
-//    @RequestMapping(value = "/user", method = RequestMethod.DELETE)
-//    public JSONObject deleteUser() {
-//
-//        return resultJson;
-//    }
 
     @ApiOperation(value = "更新一个用户", notes = "更新一个用户", httpMethod = "PUT")
     @RequestMapping(value = "/user", method = RequestMethod.PUT)
