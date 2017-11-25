@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/")
-@Api(value = "IndexController", description = "首页控制")
+@Api(value = "首页控制", description = "首页控制")
 public class IndexController {
     JSONObject jsonObject = new JSONObject();
 

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Created by wwhai on 2017/11/24.
  */
 public interface DeviceGroupRepository extends JpaRepository<DeviceGroup, String> {
-    DeviceGroup findTopBySerialNumber(String serialNumber);
+    DeviceGroup findTopBySerialNumber(Long serialNumber);
 
     DeviceGroup findTopByName(String name);
 }

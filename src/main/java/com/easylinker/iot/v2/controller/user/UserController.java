@@ -9,6 +9,7 @@ import com.easylinker.iot.v2.model.DeviceGroup;
 import com.easylinker.iot.v2.repository.AppUserRepository;
 import com.easylinker.iot.v2.repository.DeviceGroupRepository;
 import com.easylinker.iot.v2.repository.DeviceRepository;
+import com.easylinker.iot.v2.utils.QRCodeGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,7 +177,7 @@ public class UserController {
      */
     @ApiOperation(value = "增加一个设备", notes = "增加一个设备", httpMethod = "POST")
     @RequestMapping(value = "/user/device", method = RequestMethod.POST)
-    public JSONObject addDevice(Map<String, String> deviceParamMap) {
+    public JSONObject addDevice(@RequestBody Map<String, String> deviceParamMap) {
         JSONObject resultJson = new JSONObject();
         if (deviceParamMap.equals(null)) {
             resultJson.put("state", 0);
@@ -185,17 +186,25 @@ public class UserController {
             try {
                 String deviceName = deviceParamMap.get("deviceName");
                 String deviceDescribe = deviceParamMap.get("deviceDescribe");
-                String groupSerialNumber = deviceParamMap.get("groupSerialNumber");
+                Long groupSerialNumber = Long.parseLong(deviceParamMap.get("groupSerialNumber"));
                 DeviceGroup deviceGroup = deviceGroupRepository.findTopBySerialNumber(groupSerialNumber);
                 if (deviceGroup != null) {//判断是否存在分组
-                    Device device = new Device();
-                    device.setDeviceName(deviceName);
-                    device.setDeviceDescribe(deviceDescribe);
-                    device.setDeviceGroup(deviceGroup);
-                    deviceRepository.save(device);
-                    resultJson.put("state", 1);
-                    resultJson.put("data", device);
-                    resultJson.put("message", SuccessMessageEnum.DEVICE_ADD_SUCCESS);
+
+                    if (deviceRepository.findTopByDeviceName(deviceName) != null) {//判读是否存在
+                        resultJson.put("state", 0);
+                        resultJson.put("message", FailureMessageEnum.DEVICE_EXIST);
+                    } else {
+                        Device device = new Device();
+                        device.setDeviceName(deviceName);
+                        device.setDeviceDescribe(deviceDescribe);
+                        device.setDeviceGroup(deviceGroup);
+                        device.setQrCode(QRCodeGenerator.generateQRCode(device.getId()));
+                        deviceRepository.save(device);
+                        resultJson.put("state", 1);
+                        resultJson.put("data", device);
+                        resultJson.put("message", SuccessMessageEnum.DEVICE_ADD_SUCCESS);
+
+                    }
 
                 } else {//分组不存在
                     resultJson.put("state", 0);
@@ -204,6 +213,7 @@ public class UserController {
 
 
             } catch (Exception e) {
+                e.printStackTrace();
                 resultJson.put("state", 0);
                 resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
 
@@ -261,9 +271,11 @@ public class UserController {
             String deviceId = deviceParamMap.get("deviceId");
             String deviceDescribe = deviceParamMap.get("deviceDescribe");
             String deviceName = deviceParamMap.get("deviceName");
-            String groupSerialNumber = deviceParamMap.get("groupSerialNumber");
+            Long groupSerialNumber = Long.parseLong(deviceParamMap.get("groupSerialNumber"));
+
             DeviceGroup deviceGroup = deviceGroupRepository.findTopBySerialNumber(groupSerialNumber);
             if (deviceGroup != null) {//判断是否存在分组
+
                 Device device = deviceRepository.findOne(deviceId);
                 device.setDeviceName(deviceName);
                 device.setDeviceDescribe(deviceDescribe);

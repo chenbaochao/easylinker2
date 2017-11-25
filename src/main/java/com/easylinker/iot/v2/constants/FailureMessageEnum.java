@@ -24,6 +24,7 @@ public enum FailureMessageEnum {
     DEVICE_GROUP_NOT_EXIST(16, "分组不存在！"),
     DEVICE_NOT_EXIST(17, "设备不存在！"),
     EMPTY_DATA_SET(18, "数据集合为空!"),
+    DEVICE_EXIST(19, "设备已存在!"),
     NOT_AUTH(14, "账户已过期!");
 
     private int code;

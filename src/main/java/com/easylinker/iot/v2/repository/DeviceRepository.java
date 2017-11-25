@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Created by wwhai on 2017/11/24.
  */
 public interface DeviceRepository extends JpaRepository<Device, String> {
-
+    Device findTopByDeviceName(String deviceName);
 }

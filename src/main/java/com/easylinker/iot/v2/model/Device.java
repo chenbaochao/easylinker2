@@ -1,6 +1,7 @@
 package com.easylinker.iot.v2.model;
 
 import com.easylinker.iot.v2.model.base.BaseEntity;
+import com.easylinker.iot.v2.utils.MD5Generator;
 
 import javax.persistence.*;
 
@@ -11,11 +12,21 @@ import javax.persistence.*;
 @Table(name = "DEVICE")
 
 public class Device extends BaseEntity {
-    private String openId;
+    private String openId = MD5Generator.EncodingMD5(String.valueOf(System.currentTimeMillis()));
     private String deviceName;
     private String deviceDescribe;
+    private String qrCode;
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
+    }
+
     @ManyToOne(targetEntity = DeviceGroup.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private DeviceGroup deviceGroup = new DeviceGroup("DEFAULT_GROUP_"+System.currentTimeMillis(), 1L);
+    private DeviceGroup deviceGroup = new DeviceGroup("DEFAULT_GROUP_" + System.currentTimeMillis(), 1L);
 
     public DeviceGroup getDeviceGroup() {
         return deviceGroup;

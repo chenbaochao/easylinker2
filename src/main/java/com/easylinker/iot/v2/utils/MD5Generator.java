@@ -1,37 +1,39 @@
 package com.easylinker.iot.v2.utils;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by wwhai on 2017/11/15.
  */
 public class MD5Generator {
-    public static String hex(byte[] array) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < array.length; ++i) {
-            sb.append(Integer.toHexString((array[i]
-                    & 0xFF) | 0x100).substring(1, 3));
-        }
-        return sb.toString();
-    }
-
-    public static String md5Hex(String message) {
+    /***
+     * MD5加码 生成32位md5码
+     */
+    public static String EncodingMD5(String inStr) {
+        MessageDigest md5 = null;
         try {
-            MessageDigest md =
-                    MessageDigest.getInstance("MD5");
-            return hex(md.digest(message.getBytes("CP1252")));
-        } catch (NoSuchAlgorithmException e) {
-        } catch (UnsupportedEncodingException e) {
+            md5 = MessageDigest.getInstance("MD5");
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            e.printStackTrace();
+            return "";
         }
-        return null;
+        char[] charArray = inStr.toCharArray();
+        byte[] byteArray = new byte[charArray.length];
+
+        for (int i = 0; i < charArray.length; i++)
+            byteArray[i] = (byte) charArray[i];
+        byte[] md5Bytes = md5.digest(byteArray);
+        StringBuffer hexValue = new StringBuffer();
+        for (int i = 0; i < md5Bytes.length; i++) {
+            int val = ((int) md5Bytes[i]) & 0xff;
+            if (val < 16)
+                hexValue.append("0");
+            hexValue.append(Integer.toHexString(val));
+        }
+        return hexValue.toString();
+
     }
 
-    public static void main(String[] args) {
-        String email = "someone@somewhere.com";
-        String hash = md5Hex(email);
-        System.out.println("https://www.gravatar.com/avatar/" + hash);
-    }
 
 }
