@@ -16,6 +16,24 @@ public class SystemConfig extends BaseEntity {
     private String dbPassword;
     private String dbUserName;
     private String dbName;
+    private String emqBasicUsername;
+    private String emqBasicPassword;
+
+    public String getEmqBasicPassword() {
+        return emqBasicPassword;
+    }
+
+    public void setEmqBasicPassword(String emqBasicPassword) {
+        this.emqBasicPassword = emqBasicPassword;
+    }
+
+    public String getEmqBasicUsername() {
+        return emqBasicUsername;
+    }
+
+    public void setEmqBasicUsername(String emqBasicUsername) {
+        this.emqBasicUsername = emqBasicUsername;
+    }
 
     public String getMqUrl() {
         return mqUrl;
