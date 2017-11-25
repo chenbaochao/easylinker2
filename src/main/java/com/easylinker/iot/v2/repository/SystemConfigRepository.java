@@ -1,6 +1,6 @@
 package com.easylinker.iot.v2.repository;
 
-import com.easylinker.iot.v2.model.SystemConfig;
+import com.easylinker.iot.v2.model.system.SystemConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

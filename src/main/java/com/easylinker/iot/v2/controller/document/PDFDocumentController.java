@@ -1,4 +1,4 @@
-package com.easylinker.iot.v2.document;
+package com.easylinker.iot.v2.controller.document;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -3,7 +3,7 @@ package com.easylinker.iot.v2.controller.user;
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.FailureMessageEnum;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
-import com.easylinker.iot.v2.model.AppUser;
+import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.model.device.Device;
 import com.easylinker.iot.v2.model.device.DeviceGroup;
 import com.easylinker.iot.v2.repository.AppUserRepository;

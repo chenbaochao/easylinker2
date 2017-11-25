@@ -1,4 +1,4 @@
-package com.easylinker.iot.v2.model;
+package com.easylinker.iot.v2.model.user;
 
 import com.easylinker.iot.v2.model.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;

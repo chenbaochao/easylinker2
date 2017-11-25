@@ -1,7 +1,7 @@
 package com.easylinker.iot.v2.service;
 
 import com.easylinker.iot.v2.constants.FailureMessageEnum;
-import com.easylinker.iot.v2.model.AppUser;
+import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;

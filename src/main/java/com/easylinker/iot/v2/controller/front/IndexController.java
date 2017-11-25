@@ -1,7 +1,7 @@
 package com.easylinker.iot.v2.controller.front;
 
 import com.alibaba.fastjson.JSONObject;
-import com.easylinker.iot.v2.model.AppUser;
+import com.easylinker.iot.v2.model.user.AppUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

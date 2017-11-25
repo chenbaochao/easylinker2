@@ -1,6 +1,6 @@
 package com.easylinker.iot.v2.model.blog;
 
-import com.easylinker.iot.v2.model.AppUser;
+import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.model.base.BaseEntity;
 
 import javax.persistence.*;
