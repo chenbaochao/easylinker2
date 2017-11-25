@@ -298,28 +298,36 @@ public class UserController {
      */
 
     @ApiOperation(value = "增加分组", notes = "增加分组", httpMethod = "POST")
-    @RequestMapping(value = "/user/device/group/{groupName}", method = RequestMethod.POST)
-    public JSONObject addGroup(@PathVariable String groupName) throws Exception {
+    @RequestMapping(value = "/user/device/group", method = RequestMethod.POST)
+    public JSONObject addGroup(@RequestBody Map<String, String> groupNameParamMap) throws Exception {
         JSONObject resultJson = new JSONObject();
-        groupName = new String(groupName.getBytes("GBK"), "utf-8");
-        if (groupName.equals("") || groupName.equals(null)) {
+        try {
+            String groupName = groupNameParamMap.get("groupName");
+
+
+            if (groupName.equals("") || groupName.equals(null)) {
+                resultJson.put("state", 0);
+                resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+            } else {
+                /**
+                 * 是否存在
+                 */
+                if (deviceGroupRepository.findTopByName(groupName) != null) {
+                    resultJson.put("state", 0);
+                    resultJson.put("message", SuccessMessageEnum.DEVICE_GROUP_EXIST);
+                } else {
+                    DeviceGroup deviceGroup = new DeviceGroup();
+                    deviceGroup.setName(groupName);
+                    deviceGroupRepository.save(deviceGroup);
+                    resultJson.put("state", 1);
+                    resultJson.put("data", deviceGroup);
+                    resultJson.put("message", SuccessMessageEnum.DEVICE_GROUP_ADD_SUCCESS);
+                }
+
+            }
+        } catch (Exception e) {
             resultJson.put("state", 0);
             resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
-        } else {
-            /**
-             * 是否存在
-             */
-            if (deviceGroupRepository.findTopByName(groupName) != null) {
-                resultJson.put("state", 0);
-                resultJson.put("message", SuccessMessageEnum.DEVICE_GROUP_EXIST);
-            } else {
-                DeviceGroup deviceGroup = new DeviceGroup();
-                deviceGroup.setName(groupName);
-                deviceGroupRepository.save(deviceGroup);
-                resultJson.put("state", 1);
-                resultJson.put("data", deviceGroup);
-                resultJson.put("message", SuccessMessageEnum.DEVICE_GROUP_ADD_SUCCESS);
-            }
 
         }
 
