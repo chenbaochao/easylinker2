@@ -1,10 +1,7 @@
 package com.easylinker.iot.v2.emq;
 
 import com.alibaba.fastjson.JSONObject;
-import com.easylinker.iot.v2.constants.FailureMessageEnum;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.net.URL;
 
@@ -13,6 +10,7 @@ import java.net.URL;
  * 这个是EMQ的API封装
  */
 public abstract class ApiProvider {
+
     protected OkHttpClient okHttpClient;
 
     public OkHttpClient getOkHttpClient() {
@@ -25,6 +23,7 @@ public abstract class ApiProvider {
 
     public ApiProvider() {
         okHttpClient = new OkHttpClient();
+
     }
 
     protected JSONObject sendHttpPost(URL url) {
@@ -33,30 +32,29 @@ public abstract class ApiProvider {
 
     }
 
+    /**
+     * 发送GET请求
+     *
+     * @param apiUrl
+     * @return
+     */
 
-    protected JSONObject sendHttpGet(URL url) {
-        JSONObject resultJson = new JSONObject();
+    public JSONObject getEmqManagementInfo(String apiUrl) {
 
-        Request request = null;
-        Response response = null;
-        try {
-            request = new Request.Builder().url(url).build();
-            response = getOkHttpClient().newCall(request).execute();
-            if (response.isSuccessful()) {
-                return JSONObject.parseObject(response.body().string());
-            } else {
-                resultJson.put("state", 0);
-                resultJson.put("message", "Unexpected code " + response);
-                //throw new IOException();
-            }
-        } catch (Exception e) {
-            resultJson.put("state", 0);
-            resultJson.put("message", FailureMessageEnum.OPERATE_FAILED);
-        }
-        return resultJson;
+        return EMQApiHttpSender.sendHttpGet(BaseAuthHeaderProvider.LOCAL_HOST_NODE + apiUrl);
     }
 
-    ;
+    /**
+     * 发送POST JSON请求
+     *
+     * @param apiUrl
+     * @param jsonObject
+     * @return
+     */
+    public JSONObject postEmqManagementInfo(String apiUrl, JSONObject jsonObject) {
+
+        return EMQApiHttpSender.sendHttpPostRequestBody(BaseAuthHeaderProvider.LOCAL_HOST_NODE + apiUrl, jsonObject);
+    }
 
 
     /**
@@ -76,7 +74,7 @@ public abstract class ApiProvider {
      * api/v2/management/nodes/emq@127.0.0.1
      * 获取指定节点的基本信息
      */
-    public JSONObject getNodeInfomation() {
+    public JSONObject getNodeInformation(String nodeName) {
         JSONObject resultJson = new JSONObject();
         return resultJson;
     }
@@ -87,7 +85,7 @@ public abstract class ApiProvider {
      * 获取全部节点的监控数据
      */
 
-    public JSONObject getAllNodesInfomation() {
+    public JSONObject getAllNodesInformation() {
         JSONObject resultJson = new JSONObject();
         return resultJson;
     }
@@ -97,7 +95,7 @@ public abstract class ApiProvider {
      * api/v2/nodes/emq@127.0.0.1/clients
      * 获取指定节点的客户端连接列表
      */
-    public JSONObject getClientsOnNode() {
+    public JSONObject getClientsOnNode(String nodeName) {
         JSONObject resultJson = new JSONObject();
         return resultJson;
     }
@@ -108,7 +106,7 @@ public abstract class ApiProvider {
      * api/v2/nodes/emq@127.0.0.1/clients/{clientid}
      * 获取节点指定客户端连接的信息
      */
-    public JSONObject getClientInfomationOnNode() {
+    public JSONObject getClientInformationOnNode(String nodeName, String clientId) {
         JSONObject resultJson = new JSONObject();
         return resultJson;
     }
@@ -119,7 +117,7 @@ public abstract class ApiProvider {
      * api/v2/clients/{clientid}
      * 获取集群内指定客户端的信息
      */
-    public JSONObject getClientInfomationOnGroup() {
+    public JSONObject getClientInformationOnGroup() {
         JSONObject resultJson = new JSONObject();
         return resultJson;
     }
@@ -216,7 +214,7 @@ public abstract class ApiProvider {
      * 发布消息
      */
 
-    public JSONObject publishMessage() {
+    public JSONObject publishMessage(JSONObject message) {
         JSONObject resultJson = new JSONObject();
         return resultJson;
     }
@@ -226,7 +224,7 @@ public abstract class ApiProvider {
      * api/v2/mqtt/subscribe
      * 创建订阅
      */
-    public JSONObject subscribeTopic() {
+    public JSONObject subscribeTopic(String topic) {
         JSONObject resultJson = new JSONObject();
         return resultJson;
     }

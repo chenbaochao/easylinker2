@@ -3,6 +3,7 @@ package com.easylinker.iot.v2.except.framework;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Created by wwhai on 2017/11/15.
  */
 @ControllerAdvice
-public class GlobalExceptionHandler  {
+public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
@@ -27,12 +28,14 @@ public class GlobalExceptionHandler  {
         JSONObject resultJson = new JSONObject();
         if (e instanceof org.springframework.web.servlet.NoHandlerFoundException) {
             resultJson.put("state", 0);
-            resultJson.put("message", "404你懂得!");
+            resultJson.put("message", "Error code 404!Resource not found!");
+        } else if (e instanceof HttpRequestMethodNotSupportedException) {
+            resultJson.put("state", 0);
+            resultJson.put("message", "Error code 500!HTTP Method not support，please check out your http request method!");
+
         } else {
             resultJson.put("state", 0);
-            e.printStackTrace();
-            logger.info(e.getMessage());
-            resultJson.put("message", "500你懂得!");
+            resultJson.put("message", "Error code 500!Server internal error,please contract your server administrator!");
         }
         return resultJson;
     }
