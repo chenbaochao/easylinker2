@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Created by wwhai on 2017/11/26.
+ * 这个是EMQ的监控API提供类 注意 是Final的
  */
 @Component
 public final class EMQApiProvider extends ApiProvider {
@@ -31,35 +32,25 @@ public final class EMQApiProvider extends ApiProvider {
         return getEmqManagementInfo("nodes/" + nodeName + "/clients/" + clientId);
     }
 
-    /**
-     * POST
-     * api/v2/mqtt/publish
-     * 创建订阅
-     * {
-     * "topic"    : "test",
-     * "payload"  : "hello",
-     * "qos"      : 1,
-     * "retain"   : false,
-     * "client_id": "C_1492145414740"
-     * }
-     */
 
     @Override
     public JSONObject publishMessage(JSONObject message) {
-        return postEmqManagementInfo("api/v2/mqtt/publish", message);
+        return postEmqManagementInfo("mqtt/publish", message);
     }
 
 
     public static void main(String[] args) throws Exception {
         EMQApiProvider emqApiProvider = new EMQApiProvider();
-//        System.out.println(emqApiProvider.getAllNodes());
-//        System.out.println(emqApiProvider.getNodeInformation("emq@127.0.0.1"));
-//        System.out.println(emqApiProvider.getClientsOnNode("emq@127.0.0.1"));
-//        System.out.println(emqApiProvider.getClientInformationOnNode("emq@127.0.0.1", "emqttd_121483149967914"));
+
+        JSONObject json = new JSONObject();
+        json.put("a", "s");
+        json.put("b", 1);
+        json.put("c", false);
+        json.put("d", "C_1492145414740");
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("topic", "test");
-        jsonObject.put("payload", "hello");
+        jsonObject.put("topic", "$client/3e579fbe879116589e0753797b0e0bf5");
+        jsonObject.put("payload", json.toJSONString());
         jsonObject.put("qos", 1);
         jsonObject.put("retain", false);
         jsonObject.put("client_id", "C_1492145414740");

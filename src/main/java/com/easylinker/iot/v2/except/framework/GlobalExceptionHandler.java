@@ -28,14 +28,16 @@ public class GlobalExceptionHandler {
         JSONObject resultJson = new JSONObject();
         if (e instanceof org.springframework.web.servlet.NoHandlerFoundException) {
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 404!Resource not found!");
+            resultJson.put("message", "Error code 404! Resource not found!");
         } else if (e instanceof HttpRequestMethodNotSupportedException) {
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 500!HTTP Method not support，please check out your http request method!");
-
+            resultJson.put("message", "Error code 500! HTTP Method not support，please check out your http request method!");
+        } else if (e instanceof NullPointerException) {
+            resultJson.put("state", 0);
+            resultJson.put("message", "Error code 500! Required params not present!");
         } else {
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 500!Server internal error,please contract your server administrator!");
+            resultJson.put("message", "Error code 500! Unknown error!");
         }
         return resultJson;
     }
