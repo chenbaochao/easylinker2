@@ -3,10 +3,12 @@ package com.easylinker.iot.v2.except.framework;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
  * Created by wwhai on 2017/11/15.
@@ -26,7 +28,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public JSONObject defaultErrorHandler(Exception e) throws Exception {
         JSONObject resultJson = new JSONObject();
-        if (e instanceof org.springframework.web.servlet.NoHandlerFoundException) {
+        if (e instanceof NoHandlerFoundException) {
             resultJson.put("state", 0);
             resultJson.put("message", "Error code 404! Resource not found!");
         } else if (e instanceof HttpRequestMethodNotSupportedException) {
@@ -35,10 +37,13 @@ public class GlobalExceptionHandler {
         } else if (e instanceof NullPointerException) {
             resultJson.put("state", 0);
             resultJson.put("message", "Error code 500! Required params not present!");
-        } else {
-            e.printStackTrace();
+        } else if (e instanceof InternalAuthenticationServiceException) {
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 500! Unknown error!" + e.getMessage());
+            resultJson.put("message", "账户没有激活!");
+        } else {
+
+            resultJson.put("state", 0);
+            resultJson.put("message", "Error code 500! Unknown error!");
         }
         return resultJson;
     }

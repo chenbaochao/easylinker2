@@ -61,21 +61,14 @@ public class EmqRESTApiController {
         return emqApiProvider.getClientsOnNode(nodeName);
     }
 
-    @ApiOperation(value = "获取具体的一个节点上的设备列表", notes = "获取具体的一个节点上的设备列表", httpMethod = "GET")
-    @RequestMapping(value = "/getClientsOnNode/{nodeName:.+}/{clientId}", method = RequestMethod.GET)
+    @ApiOperation(value = "获取具体的一个节点上的设备", notes = "获取具体的一个节点上的设备", httpMethod = "GET")
+    @RequestMapping(value = "/getClientInformationOnNode/{nodeName:.+}/{clientId}", method = RequestMethod.GET)
 
     public JSONObject getClientInformationOnNode(@PathVariable String nodeName, @PathVariable String clientId) {
         return emqApiProvider.getClientInformationOnNode(nodeName, clientId);
     }
 
     /**
-     * {
-     * "topic"    : "test",
-     * "payload"  : "hello",
-     * "qos"      : 1,
-     * "retain"   : false,
-     * "client_id": "C_1492145414740"
-     * }
      *
      * @param messageMap
      * @return
