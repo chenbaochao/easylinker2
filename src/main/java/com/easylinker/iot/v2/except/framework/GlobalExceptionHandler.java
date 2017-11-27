@@ -36,8 +36,9 @@ public class GlobalExceptionHandler {
             resultJson.put("state", 0);
             resultJson.put("message", "Error code 500! Required params not present!");
         } else {
+            e.printStackTrace();
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 500! Unknown error!");
+            resultJson.put("message", "Error code 500! Unknown error!" + e.getMessage());
         }
         return resultJson;
     }

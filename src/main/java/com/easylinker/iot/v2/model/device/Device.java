@@ -19,17 +19,16 @@ public class Device extends BaseEntity {
     private String deviceDescribe;
     private String qrCode;
 
-    @JsonIgnore
-    @OneToMany(targetEntity = DeviceData.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<DeviceData> deviceDataList;
-
-    public List<DeviceData> getDeviceDataList() {
-        return deviceDataList;
-    }
-
-    public void setDeviceDataList(List<DeviceData> deviceDataList) {
-        this.deviceDataList = deviceDataList;
-    }
+//    @OneToMany(targetEntity = DeviceData.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<DeviceData> deviceDataList;
+//
+//    public List<DeviceData> getDeviceDataList() {
+//        return deviceDataList;
+//    }
+//
+//    public void setDeviceDataList(List<DeviceData> deviceDataList) {
+//        this.deviceDataList = deviceDataList;
+//    }
 
     public String getQrCode() {
         return qrCode;

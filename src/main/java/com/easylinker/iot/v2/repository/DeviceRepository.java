@@ -13,5 +13,7 @@ public interface DeviceRepository extends JpaRepository<Device, String> {
 
     Page<Device> findAll(Pageable pageable);
 
-    Page<Device> findAllByDeviceDataList(Pageable pageable);
+    //Page<Device> findAllByDeviceDataList(Pageable pageable);
+
+    Device findTopByOpenId(String openId);
 }
