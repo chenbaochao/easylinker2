@@ -17,42 +17,29 @@ public class AppUserDetailService implements UserDetailsService {
     AppUserRepository appUserRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String argument) {
+    public UserDetails loadUserByUsername(String argument) throws UsernameNotFoundException {
 
         /**
          * 可以用Username Or Email Or Phone 登录
          */
 
 
-        AppUser appUser = null;
-        try {
-            appUser = appUserRepository.findTop1ByUsernameOrEmailOrPhone(argument, argument, argument);
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (e instanceof UsernameNotFoundException) {
-                System.out.println("用户找不到");
+        AppUser appUser = appUserRepository.findTop1ByUsernameOrEmailOrPhone(argument, argument, argument);
 
-            } else if (e instanceof DisabledException) {
-                System.out.println("用户没有激活");
+        if (appUser == null) {
+            throw new UsernameNotFoundException("");
+        } else if (!appUser.isEnabled()) {
+            System.out.println("用户找不到");
+            throw new UsernameNotFoundException("用户找不到");
+        } else if (!appUser.isEnabled()) {
+            System.out.println("用户没有激活");
+            throw new DisabledException("用户没有激活");
+        } else if (appUser.isAccountNonLocked()) {
+            System.out.println("用户锁定");
+            throw new LockedException("用户锁定");
 
-            } else if (e instanceof LockedException) {
-                System.out.println("用户锁定");
-            }
-
-
+        } else {
+            return appUser;
         }
-//        if (appUser == null) {
-//
-//            throw new UsernameNotFoundException(FailureMessageEnum.USER_NOT_EXIST.toString());
-//
-//
-//        } else if (!appUser.isEnabled()) {
-//            throw new DisabledException(FailureMessageEnum.NO_ACTIVE.toString());
-//        } else if (!appUser.isAccountNonLocked()) {
-//            throw new LockedException(FailureMessageEnum.USER_LOCKED.toString());
-//        } else {
-//            return appUser;
-//        }
-        return appUser;
     }
 }
