@@ -23,7 +23,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         JSONObject returnJson = new JSONObject();
-        System.out.println(e.getClass());
 
         if (e instanceof UsernameNotFoundException) {
             returnJson.put("state", 0);

@@ -3,9 +3,9 @@ package com.easylinker.iot.v2.controller.user;
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.FailureMessageEnum;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
-import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.model.device.Device;
 import com.easylinker.iot.v2.model.device.DeviceGroup;
+import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.repository.AppUserRepository;
 import com.easylinker.iot.v2.repository.DeviceGroupRepository;
 import com.easylinker.iot.v2.repository.DeviceRepository;
@@ -49,8 +49,15 @@ public class UserController {
         return resultJson;
     }
 
+    /**
+     * 包含了注册
+     *
+     * @param loginParamMap
+     * @return
+     */
+
     @ApiOperation(value = "增加一个用户", notes = "增加一个用户", httpMethod = "POST")
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
     public JSONObject addUser(@RequestBody(required = false) Map<String, String> loginParamMap) {
         JSONObject resultJson = new JSONObject();
         /**

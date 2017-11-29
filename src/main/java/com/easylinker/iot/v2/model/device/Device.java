@@ -2,10 +2,8 @@ package com.easylinker.iot.v2.model.device;
 
 import com.easylinker.iot.v2.model.base.BaseEntity;
 import com.easylinker.iot.v2.utils.MD5Generator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by wwhai on 2017/11/15.
@@ -18,17 +16,6 @@ public class Device extends BaseEntity {
     private String deviceName;
     private String deviceDescribe;
     private String qrCode;
-
-//    @OneToMany(targetEntity = DeviceData.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<DeviceData> deviceDataList;
-//
-//    public List<DeviceData> getDeviceDataList() {
-//        return deviceDataList;
-//    }
-//
-//    public void setDeviceDataList(List<DeviceData> deviceDataList) {
-//        this.deviceDataList = deviceDataList;
-//    }
 
     public String getQrCode() {
         return qrCode;
