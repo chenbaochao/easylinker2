@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -39,13 +40,21 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
         String loginParam = requestUsernamePasswordBean.getUsername();
         String password = requestUsernamePasswordBean.getPassword();
 
-        if (true && !request.getMethod().equals("POST")) {
-            throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
-        } else {
-            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginParam, password);
-            this.setDetails(request, authRequest);
-            return this.getAuthenticationManager().authenticate(authRequest);
+
+        Authentication authentication = null;
+        try {
+            if (true && !request.getMethod().equals("POST")) {
+                throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
+            } else {
+                UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginParam, password);
+                this.setDetails(request, authRequest);
+                authentication = getAuthenticationManager().authenticate(authRequest);
+            }
+        } catch (AuthenticationException e) {
+            //e.printStackTrace();
+            logger.error("认证失败");
         }
+        return authentication;
     }
 
 

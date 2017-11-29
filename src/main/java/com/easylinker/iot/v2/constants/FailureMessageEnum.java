@@ -25,8 +25,11 @@ public enum FailureMessageEnum {
     DEVICE_NOT_EXIST(17, "设备不存在！"),
     EMPTY_DATA_SET(18, "数据集合为空!"),
     DEVICE_EXIST(19, "设备已存在!"),
+    USER_DISABLED(20, "用户被锁定!"),
+    USER_EXPIRED(21, "用户被锁定!"),
+    //InternalAuthenticationServiceException
 
-    NOT_AUTH(14, "账户已过期!");
+    NOT_AUTH(14, "请认证!");
 
     private int code;
     private String message;

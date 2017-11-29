@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public JSONObject defaultErrorHandler(Exception e) throws Exception {
+    public JSONObject defaultErrorHandler(Exception e) {
         JSONObject resultJson = new JSONObject();
         if (e instanceof NoHandlerFoundException) {
             resultJson.put("state", 0);
@@ -37,14 +37,12 @@ public class GlobalExceptionHandler {
         } else if (e instanceof NullPointerException) {
             resultJson.put("state", 0);
             resultJson.put("message", "Error code 500! Required params not present!");
-        } else if (e instanceof UsernameNotFoundException) {
-            resultJson.put("state", 0);
-            resultJson.put("message", "账户没有激活!");
-        } else {
 
+        } else {
             resultJson.put("state", 0);
             resultJson.put("message", "Error code 500! Unknown error!");
         }
         return resultJson;
     }
+
 }

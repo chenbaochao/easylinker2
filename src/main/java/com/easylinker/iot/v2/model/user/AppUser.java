@@ -31,6 +31,7 @@ public class AppUser extends BaseEntity implements UserDetails {
     private boolean isCredentialsNonExpired = true;
     private boolean isEnabled = true;
 
+    @JsonIgnore
     @OneToMany(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Role> roleList = new ArrayList<>();
 

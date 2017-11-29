@@ -25,6 +25,5 @@ public class AnonymousHandler implements AuthenticationEntryPoint {
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.getWriter().write(returnJson.toJSONString());
         httpServletResponse.getWriter().flush();
-
     }
 }
