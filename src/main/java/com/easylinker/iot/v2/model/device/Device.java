@@ -16,6 +16,15 @@ public class Device extends BaseEntity {
     private String deviceName;
     private String deviceDescribe;
     private String qrCode;
+    private boolean isOnline = false;
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
 
     public String getQrCode() {
         return qrCode;
