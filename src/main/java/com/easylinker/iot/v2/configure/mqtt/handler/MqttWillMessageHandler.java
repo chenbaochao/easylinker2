@@ -31,6 +31,7 @@ public class MqttWillMessageHandler implements MessageHandler {
     @Autowired
     DeviceRepository deviceRepository;
 
+
     @Override
     public void handleMessage(Message<?> message) throws MessagingException {
         try {
