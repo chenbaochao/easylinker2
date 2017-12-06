@@ -3,11 +3,9 @@ package com.easylinker.iot.v2.aop;
 import com.easylinker.iot.v2.annotation.EasyApi;
 import com.easylinker.iot.v2.annotation.EasyLinkerApiEntry;
 import com.easylinker.iot.v2.annotation.ProjectInformation;
-import com.easylinker.iot.v2.utils.PDFDocumentGenerator;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

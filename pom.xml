@@ -159,6 +159,13 @@
         </dependency>
 
 
+
+        <dependency>
+            <groupId>com.upyun</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>3.13</version>
+        </dependency>
+
     </dependencies>
 
     <build>

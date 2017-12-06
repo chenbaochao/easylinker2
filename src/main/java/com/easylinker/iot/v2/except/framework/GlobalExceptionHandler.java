@@ -36,11 +36,11 @@ public class GlobalExceptionHandler {
             resultJson.put("message", "Error code 500! HTTP Method not support，please check out your http request method!");
         } else if (e instanceof NullPointerException) {
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 500! Required params not present!");
+            resultJson.put("message", "Error code 500! Required params not present!" + e.getMessage());
 
         } else if (e instanceof HttpMessageNotReadableException) {
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 500! Required params not present!");
+            resultJson.put("message", "Error code 500! HttpMessageNotReadable!" + e.getMessage());
         }
         return resultJson;
     }
