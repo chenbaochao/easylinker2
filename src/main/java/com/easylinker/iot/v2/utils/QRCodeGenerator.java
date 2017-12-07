@@ -41,7 +41,6 @@ public class QRCodeGenerator {
             System.out.println("二维码生成失败!");
 
         }
-        System.out.println(path);
         return path;
     }
 
@@ -62,7 +61,4 @@ public class QRCodeGenerator {
         return result.getText();
     }
 
-//    public static void main(String[] args) {
-//        generateQRCode("312312312123");
-//    }
 }
