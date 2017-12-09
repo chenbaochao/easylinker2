@@ -4,13 +4,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.FailureMessageEnum;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
+import com.easylinker.iot.v2.model.config.UpYunAccount;
 import com.easylinker.iot.v2.model.user.AppUser;
+import com.easylinker.iot.v2.repository.UpYunAccountRepository;
 import com.easylinker.iot.v2.utils.FilePathHelper;
 import main.java.com.UpYun;
 import main.java.com.upyun.FormUploader;
 import main.java.com.upyun.Params;
 import main.java.com.upyun.Result;
 import org.aspectj.util.FileUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,20 +29,44 @@ import java.util.Map;
 @RestController
 @RequestMapping("/file")
 public class UpYunFileServiceController {
-    public static final String SAVE_URL = "/easylinker/user/";
+    private UpYunAccount upYunAccount;
+    FormUploader uploader;
+    UpYun upyun;
+    @Autowired
+    UpYunAccountRepository upYunAccountRepository;
+
+    public static final String SAVE_URL = "/EASY_LINKER/USER/";
+
     /**
      * 后面从数据库里面加载，暂时写死
      */
-    FormUploader uploader = new FormUploader(
-            "easylinker",
-            "lF+X+o/etZ1Xi7kkFdaXwtoZwrA=",
-            null);
-    UpYun upyun = new UpYun(
-            "easylinker",
-            "18059150204",
-            "wwhlovejava123"
-    );
 
+
+    public UpYunFileServiceController() {
+        upYunAccount = upYunAccountRepository.findTopById("EASY_LINKER");
+        uploader = new
+
+                FormUploader(
+                upYunAccount.getBucketName(),
+                upYunAccount.getApiKey(),
+                e -> null);
+
+        upyun = new
+
+                UpYun(
+                upYunAccount.getBucketName(),
+                upYunAccount.getUsername(),
+                upYunAccount.getPassword()
+        );
+    }
+
+    /**
+     * 上传文件 注意 是Form形式 不能用JSON
+     *
+     * @param multipartFiles
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/upload")
     public JSONObject upload(@RequestParam(name = "files") MultipartFile[] multipartFiles) throws Exception {
 
@@ -84,6 +111,9 @@ public class UpYunFileServiceController {
         return resultJson;
     }
 
+    /*
+    这个用来批量删除文件
+     */
     @RequestMapping(value = "/deleteFiles", method = RequestMethod.POST)
     public JSONObject deleteFiles(@RequestBody JSONObject filesJson) {
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -134,31 +164,5 @@ public class UpYunFileServiceController {
 
     }
 
-    public static void main(String[] args) throws Exception {
-//        UpYun upyun = new UpYun(
-//                "easylinker",
-//                "18059150204",
-//                "wwhlovejava123"
-//        );
-//
-//        List<UpYun.FolderItem> items = upyun.readDir("/uploads/20171206");
-//        for (int i = 0; i < items.size(); i++) {
-//            System.out.println(items.get(i).name);
-//            System.out.println(upyun.deleteFile(items.get(i).name));
-
-//        }
-
-        JSONArray jsonArray = new JSONArray();
-        JSONObject resultJson = new JSONObject();
-
-        jsonArray.add("wq543we5f3w4x254q534q");
-        jsonArray.add("wq543we5f3w4x254q534q");
-        jsonArray.add("wq543we5f3w4x254q534q");
-        jsonArray.add("wq543we5f3w4x254q534q");
-        resultJson.put("files", jsonArray);
-        resultJson.put("state", 1);
-        System.out.println(resultJson.toJSONString());
-
-    }
 
 }

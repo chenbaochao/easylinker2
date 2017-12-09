@@ -48,7 +48,7 @@ public class EasyLinker2Application implements CommandLineRunner {
          *
          */
 
-        System.out.println("启动后-----");
+        System.out.println("启动成功");
     }
 
 }
