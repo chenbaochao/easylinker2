@@ -1,8 +1,8 @@
-&emsp;&emsp;![](github_assets/logo.png)
-# EasyLinker V2.0
-###学习群：475512169
-###EasyLinker-EMQ : https://git.coding.net/ChildeWWH/EMQ_Easylinker.git  
-#前言
+&emsp;&emsp;![](github_assets/logo.png)  
+# EasyLinker V2.0  
+###学习群：475512169  
+###EasyLinker-EMQ : https://git.coding.net/ChildeWWH/EMQ_Easylinker.git    
+#前言  
 
 >本人是电子信息工程理工科男一枚，标准技术宅。本应该去研究CPU架构和汇编语言的我，却迷上了WEB互联网开发。加上平时喜欢折腾一些极客玩具，渐渐的对硬件也来了兴趣。
 平日里酷爱折腾一些极客玩具的我，再加上本人身处硬件相关专业，平时接触到了很多不一样的问题。问题总是围绕在身边。
