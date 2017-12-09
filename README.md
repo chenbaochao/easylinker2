@@ -1,4 +1,4 @@
-&emsp;&emsp;![](github_assets/logo.png)  
+![](github_assets/logo.png)  
 # EasyLinker V2.0  
 ###学习群：475512169  
 ###EasyLinker-EMQ : https://git.coding.net/ChildeWWH/EMQ_Easylinker.git    
