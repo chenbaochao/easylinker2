@@ -8,6 +8,8 @@ import com.easylinker.iot.v2.model.config.UpYunAccount;
 import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.repository.UpYunAccountRepository;
 import com.easylinker.iot.v2.utils.FilePathHelper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import main.java.com.UpYun;
 import main.java.com.upyun.FormUploader;
 import main.java.com.upyun.Params;
@@ -26,39 +28,17 @@ import java.util.Map;
 /**
  * Created by wwhai on 2017/12/7.
  */
+@Api(value = "又拍云文件存储服务", description = "又拍云文件存储服务")
+
 @RestController
 @RequestMapping("/file")
 public class UpYunFileServiceController {
-    private UpYunAccount upYunAccount;
-    FormUploader uploader;
-    UpYun upyun;
+
     @Autowired
     UpYunAccountRepository upYunAccountRepository;
 
     public static final String SAVE_URL = "/EASY_LINKER/USER/";
 
-    /**
-     * 后面从数据库里面加载，暂时写死
-     */
-
-
-    public UpYunFileServiceController() {
-        upYunAccount = upYunAccountRepository.findTopById("EASY_LINKER");
-        uploader = new
-
-                FormUploader(
-                upYunAccount.getBucketName(),
-                upYunAccount.getApiKey(),
-                e -> null);
-
-        upyun = new
-
-                UpYun(
-                upYunAccount.getBucketName(),
-                upYunAccount.getUsername(),
-                upYunAccount.getPassword()
-        );
-    }
 
     /**
      * 上传文件 注意 是Form形式 不能用JSON
@@ -67,8 +47,15 @@ public class UpYunFileServiceController {
      * @return
      * @throws Exception
      */
+    @ApiOperation(value = "上传文件", notes = "以数组的形式上传，注意，是formdata形式", httpMethod = "POST")
     @RequestMapping("/upload")
     public JSONObject upload(@RequestParam(name = "files") MultipartFile[] multipartFiles) throws Exception {
+        UpYunAccount upYunAccount = upYunAccountRepository.findTopById("EASY_LINKER");
+        FormUploader uploader = new
+                FormUploader(
+                upYunAccount.getBucketName(),
+                upYunAccount.getApiKey(),
+                e -> null);
 
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         JSONArray resultArray = new JSONArray();
@@ -114,19 +101,29 @@ public class UpYunFileServiceController {
     /*
     这个用来批量删除文件
      */
+    @ApiOperation(value = "批量删除文件", notes = "以数组的形式批量删除", httpMethod = "POST")
+
     @RequestMapping(value = "/deleteFiles", method = RequestMethod.POST)
     public JSONObject deleteFiles(@RequestBody JSONObject filesJson) {
+        UpYunAccount upYunAccount = upYunAccountRepository.findTopById("EASY_LINKER");
+        UpYun upYun = new
+
+                UpYun(
+                upYunAccount.getBucketName(),
+                upYunAccount.getUsername(),
+                upYunAccount.getPassword()
+        );
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         JSONObject resultJson = new JSONObject();
         JSONObject deleteResultJson = new JSONObject();
 
         JSONArray jsonArray = filesJson.getJSONArray("files");
-        List<UpYun.FolderItem> items = upyun.readDir(SAVE_URL + appUser.getId() + "/");
+        List<UpYun.FolderItem> items = upYun.readDir(SAVE_URL + appUser.getId() + "/");
         for (Object object : jsonArray) {
 
             boolean isDelete = false;
             try {
-                isDelete = upyun.deleteFile(SAVE_URL + appUser.getId() + "/" + object.toString());
+                isDelete = upYun.deleteFile(SAVE_URL + appUser.getId() + "/" + object.toString());
             } catch (Exception e) {
 
             }
@@ -146,12 +143,22 @@ public class UpYunFileServiceController {
 
     }
 
+    @ApiOperation(value = "文件列表", notes = "上传文件列表", httpMethod = "GET")
+
     @RequestMapping("/files")
     public JSONObject files() {
+        UpYunAccount upYunAccount = upYunAccountRepository.findTopById("EASY_LINKER");
+        UpYun upYun = new
+
+                UpYun(
+                upYunAccount.getBucketName(),
+                upYunAccount.getUsername(),
+                upYunAccount.getPassword()
+        );
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         JSONObject resultJson = new JSONObject();
         JSONArray resultArray = new JSONArray();
-        List<UpYun.FolderItem> items = upyun.readDir(SAVE_URL + appUser.getId() + "/");
+        List<UpYun.FolderItem> items = upYun.readDir(SAVE_URL + appUser.getId() + "/");
         for (UpYun.FolderItem folderItem : items) {
             resultArray.add(folderItem);
         }

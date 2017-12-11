@@ -1,41 +1,40 @@
 package com.easylinker.iot.v2.controller.front;
 
-import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.model.user.AppUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by wwhai on 2017/11/15.
  */
-@RestController
-@RequestMapping("/")
+@Controller
+
 @Api(value = "网站首页控制", description = "首页控制")
 public class IndexController {
-    JSONObject jsonObject = new JSONObject();
 
 
-    @RequestMapping(value = "/test", method = RequestMethod.POST)
-    @ApiOperation(value = "测试API", notes = "这个是用来测试的", response = AppUser.class, httpMethod = "POST")
-    @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input", response = AppUser.class)})
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    @ApiOperation(value = "系统自带的简单首页", notes = "系统自带的简单首页", response = AppUser.class, httpMethod = "GET")
+    public void index(HttpServletResponse httpServletResponse) throws Exception {
+        httpServletResponse.setCharacterEncoding("utf-8");
+        httpServletResponse.setContentType("text/html");
+        httpServletResponse.getWriter().write(
+                "<div align=\"center\"><hr>" +
+                        "<h1>EasyLinker</h1>\n" +
+                        "Version2.0" +
+                        "<p>By EasyTeam.2017.10</p>\n" +
+                        "<a href=\"swagger-ui.html\">【API文档】</a><br>" +
+                        "<a href=\"http://www.easylinker.xyz\">【我们的网站】</a><hr>" +
+                        "<p color=\"blue\">如果你看到这个页面，说明项目启动成功了!本页面仅仅是一个测试页面，如果你要自定义，请修改源代码里面的具体逻辑!</p>"
+                        + "</div>"
+        );
+        httpServletResponse.getWriter().flush();
 
-    public JSONObject testPost() {
-        jsonObject.put("message", "Test成功");
-        return jsonObject;
-    }
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    @ApiOperation(value = "测试API", notes = "这个是用来测试的", response = AppUser.class, httpMethod = "GET")
-    @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input", response = AppUser.class)})
-
-    public JSONObject testGet() {
-        jsonObject.put("message", "Test成功");
-        return jsonObject;
     }
 
 

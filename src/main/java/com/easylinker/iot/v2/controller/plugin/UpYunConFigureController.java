@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
 import com.easylinker.iot.v2.model.config.UpYunAccount;
 import com.easylinker.iot.v2.repository.UpYunAccountRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,32 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by wwhai on 2017/11/27.
  * 集成又拍云
  */
+@Api(value = "又拍云的配置操作", description = "又拍云的配置操作")
+
 @RestController
 @RequestMapping("/upyun")
-public class UpYunController {
+public class UpYunConFigureController {
     @Autowired
     UpYunAccountRepository upYunAccountRepository;
-    UpYunAccount upYunAccount;
-
-//    UpYunController() {
-//
-//        if (upYunAccountRepository.findTopById("EASY_LINKER") == null) {
-//            System.out.println("开始配置默认的又拍云账户!");
-//            upYunAccount = new UpYunAccount();
-//            upYunAccount.setId("EASY_LINKER");
-//            upYunAccount.setUsername("EASY_LINKER");
-//            upYunAccount.setPassword("EASY_LINKER");
-//            upYunAccount.setBucketName("EASY_LINKER");
-//            upYunAccount.setApiKey("EASY_LINKER");
-//            upYunAccountRepository.save(upYunAccount);
-//            System.out.println("又拍云默认账户配置成功，生产环境需要换成自己的!");
-//        }
-//
-//    }
 
     /**
      * 修改配置信息
      */
+    @ApiOperation(value = "自定义配置又拍云", notes = "自定义配置又拍云", httpMethod = "POST")
+
     @RequestMapping("/configUpYun")
     public JSONObject configUpYun(@RequestBody JSONObject configJson) {
         JSONObject resultJson = new JSONObject();

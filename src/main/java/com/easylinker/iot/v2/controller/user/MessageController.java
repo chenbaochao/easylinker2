@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
 import com.easylinker.iot.v2.emq.EMQApiProvider;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by wwhai on 2017/12/7.
  * 用来处理消息推送
  */
+@Api(value = "消息推送API", description = "这个是用来给设备推送消息的HTTP接口")
 @RestController
 @RequestMapping("/message")
 public class MessageController {
@@ -35,7 +37,7 @@ public class MessageController {
      * "message":"hello world"
      * }
      */
-    @ApiOperation(value = "分组列表", notes = "分组列表", httpMethod = "POST")
+    @ApiOperation(value = "推送消息", notes = "给设备推送消息", httpMethod = "POST")
     @RequestMapping(value = "/pushMessage", method = RequestMethod.POST)
     public JSONObject pushMessage(@RequestBody JSONObject pushBody) {
         JSONObject resultJson = new JSONObject();

@@ -16,6 +16,8 @@ public class SecurityRouter {
     public SecurityRouter() {
         webResourcesRouter = new ArrayList<>();
         httpSecurityRouter = new ArrayList<>();
+        addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_DOCUMENT_PATH.getUrl());
+        addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_INDEX_PATH.getUrl());
         addHttpSecurityRouter(SecurityCommonUrl.DEFAULT_TEST_PATH.getUrl());
         addWebResourcesRouter(SecurityCommonUrl.DEFAULT_STATIC_PATH.getUrl());
         addWebResourcesRouter(SecurityCommonUrl.DEFAULT_PDF_URL.getUrl());

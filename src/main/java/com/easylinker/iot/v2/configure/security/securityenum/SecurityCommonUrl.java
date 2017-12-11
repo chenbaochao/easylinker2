@@ -12,6 +12,8 @@ public enum SecurityCommonUrl {
     DEFAULT_STATIC_PATH("默认静态资源的路径", "/static/**"),
     DEFAULT_AVATAR_PATH("默认头像的路径", "/avatar/**"),
     DEFAULT_TEST_PATH("默认测试接口", "/test"),
+    DEFAULT_INDEX_PATH("默认首页", "/index"),
+    DEFAULT_DOCUMENT_PATH("默认文档页面", "/document"),
     DEFAULT_PDF_URL("默认的PDF输出目录", "/api/pdf");
 
     public static final String[] SWAGGER_UI_MATCHER = new String[]{

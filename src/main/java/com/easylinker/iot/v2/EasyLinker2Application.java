@@ -1,11 +1,13 @@
 package com.easylinker.iot.v2;
 
+import com.easylinker.iot.v2.model.config.UpYunAccount;
+import com.easylinker.iot.v2.repository.UpYunAccountRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -27,28 +29,36 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableAsync
 @EnableSwagger2
 public class EasyLinker2Application implements CommandLineRunner {
+    private static Logger logger = LoggerFactory.getLogger(EasyLinker2Application.class);
+    @Autowired
+    UpYunAccountRepository upYunAccountRepository;
 
-
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(EasyLinker2Application.class);
-        springApplication.run(args);
-
-    }
 
     @Override
     public void run(String... strings) throws Exception {
-        /**
-         * 在这里要执行一些初始化的操作
-         * 1 生成默认的配置文件 写入数据库里面 比如 you拍云 等等
-         * 2 生成默认的MQTT用户表 增加默认的数据 √
-         * 3 生成默认的权限表  写入ACL √
-         * 4 默认配置为Localhost节点
-         * 5 设备组默认增加一个组  Default组
-         * 6 用户有2个角色（目前） ADMIN  USER  也要初始化
-         *
-         */
-
-        System.out.println("启动成功");
+        initialUpYunAccount();
+        logger.info("项目启动成功");
     }
+
+    /**
+     * 初始化UpYUN的账户
+     */
+    public void initialUpYunAccount() {
+
+        UpYunAccount upYunAccount = upYunAccountRepository.findTopById("EASY_LINKER");
+        if (upYunAccount == null) {
+            logger.info("开始初始化又拍云的账户数据");
+            upYunAccount = new UpYunAccount();
+            upYunAccount.setId("EASY_LINKER");
+            upYunAccount.setApiKey("EASY_LINKER");
+            upYunAccount.setBucketName("EASY_LINKER");
+            upYunAccount.setUsername("EASY_LINKER");
+            upYunAccount.setPassword("EASY_LINKER");
+            upYunAccountRepository.save(upYunAccount);
+            logger.info("又拍云初始化账户增加成功，请在生产环境替换成自己的账户.");
+        }
+
+    }
+
 
 }
