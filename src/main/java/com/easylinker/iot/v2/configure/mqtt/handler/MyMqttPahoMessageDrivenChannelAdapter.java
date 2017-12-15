@@ -7,21 +7,17 @@ import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannel
  * Created by wwhai on 2017/12/11.
  */
 public class MyMqttPahoMessageDrivenChannelAdapter extends MqttPahoMessageDrivenChannelAdapter {
-    public MyMqttPahoMessageDrivenChannelAdapter(String url, String clientId, MqttPahoClientFactory clientFactory, String... topic) {
-        super(url, clientId, clientFactory, topic);
-    }
 
     public MyMqttPahoMessageDrivenChannelAdapter(String clientId, MqttPahoClientFactory clientFactory, String... topic) {
         super(clientId, clientFactory, topic);
     }
 
-    public MyMqttPahoMessageDrivenChannelAdapter(String url, String clientId, String... topic) {
-        super(url, clientId, topic);
-    }
-
     @Override
     public synchronized void connectionLost(Throwable cause) {
-        super.connectionLost(cause);
+        //super.connectionLost(cause);
+        System.out.println("------------------------------"+cause.getMessage());
     }
+
+
 
 }

@@ -1,5 +1,6 @@
 package com.easylinker.iot.v2.configure.security.filter;
 
+import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.configure.security.RequestUsernamePasswordBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,6 +13,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 关于这个Filter的理解
@@ -32,7 +34,7 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(DEFAULT_LOGIN_URL, DEFAULT_LOGIN_METHOD));
         requestUsernamePasswordBean = new RequestUsernamePasswordBean(request);
@@ -42,18 +44,32 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
 
 
         Authentication authentication = null;
-        try {
-            if (true && !request.getMethod().equals("POST")) {
-                throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
-            } else {
-                UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginParam, password);
-                this.setDetails(request, authRequest);
+
+        if (true && !request.getMethod().equals("POST")) {
+            throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
+        } else {
+            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginParam, password);
+            this.setDetails(request, authRequest);
+
+            try {
                 authentication = getAuthenticationManager().authenticate(authRequest);
+            } catch (AuthenticationException e) {
+                JSONObject resultJson = new JSONObject();
+                resultJson.put("state", 0);
+                resultJson.put("message", "登录失败!");
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                try {
+                    response.getWriter().write(resultJson.toJSONString());
+                    response.getWriter().flush();
+                } catch (IOException e1) {
+                    //登录失败返回JSON
+                    logger.error("登录失败");
+                }
             }
-        } catch (AuthenticationException e) {
-            //e.printStackTrace();
-            logger.error("认证失败");
         }
+
         return authentication;
     }
 

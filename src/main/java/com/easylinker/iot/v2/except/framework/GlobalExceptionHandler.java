@@ -1,6 +1,7 @@
 package com.easylinker.iot.v2.except.framework;
 
 import com.alibaba.fastjson.JSONObject;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -41,8 +42,14 @@ public class GlobalExceptionHandler {
         } else if (e instanceof HttpMessageNotReadableException) {
             resultJson.put("state", 0);
             resultJson.put("message", "Error code 500! HttpMessageNotReadable!" + e.getMessage());
+        } else {
+            resultJson.put("state", 0);
+            resultJson.put("message", "Error code 500!" + e.getMessage());
         }
         return resultJson;
     }
+
+
+
 
 }

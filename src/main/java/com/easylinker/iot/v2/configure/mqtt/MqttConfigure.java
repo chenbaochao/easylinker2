@@ -1,6 +1,5 @@
 package com.easylinker.iot.v2.configure.mqtt;
 
-import com.easylinker.iot.v2.configure.mqtt.handler.DisconnectedHandler;
 import com.easylinker.iot.v2.configure.mqtt.handler.MqttWillMessageHandler;
 import com.easylinker.iot.v2.configure.mqtt.handler.MyMqttPahoMessageDrivenChannelAdapter;
 import com.easylinker.iot.v2.model.device.Device;
@@ -8,7 +7,6 @@ import com.easylinker.iot.v2.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.endpoint.MessageProducerSupport;
@@ -58,9 +56,11 @@ public class MqttConfigure {
             deviceRepository.save(device);
         }
 
+
         factory.setServerURIs(LOCALHOST_EMQ_URL);
         factory.setUserName(EASY_LINKER_EMQ_USERNAME);
         factory.setPassword(EASY_LINKER_EMQ_PASSWORD);
+
         return factory;
     }
 
@@ -72,9 +72,11 @@ public class MqttConfigure {
 
     @Bean
     public MessageProducerSupport mqttInbound() {
+
         MqttPahoMessageDrivenChannelAdapter adapter = new MyMqttPahoMessageDrivenChannelAdapter(
                 EASY_LINKER_EMQ_USERNAME,
                 mqttClientFactory());
+
         adapter.addTopic(EASY_LINKER_MONITOR_TOPIC);
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());

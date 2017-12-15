@@ -40,6 +40,9 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         } else if (e instanceof InternalAuthenticationServiceException) {
             returnJson.put("state", 0);
             returnJson.put("message", "用户不存在");
+        } else {
+            returnJson.put("state", 0);
+            returnJson.put("message", "登录失败");
         }
 
         httpServletResponse.setContentType("application/json");
