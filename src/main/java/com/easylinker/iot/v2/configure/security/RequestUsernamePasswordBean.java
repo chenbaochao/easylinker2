@@ -59,7 +59,8 @@ public class RequestUsernamePasswordBean {
                 this.setPassword(password);
 
             } else {
-                throw new Exception("Only POST method can be support REST!");
+                System.err.println("Only POST method can be support REST!");
+
             }
 
         } catch (Exception e) {
