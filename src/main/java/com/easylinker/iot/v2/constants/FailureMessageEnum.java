@@ -19,7 +19,7 @@ public enum FailureMessageEnum {
     REQUIRED_APIKEY(11, "没有APIKey"),
     FILE_DOWNLOAD_FAILED(12, "文件下载失败!"),
     INVALID_PARAM(13, "必填字段缺少！"),
-    USER_EXIST(13, "用户已经存在，请不要重复添加！"),
+    USER_ALREADY_EXIST(13, "用户已经存在，请不要重复添加！"),
     OPERATE_FAILURE(15, "操作失败！"),
     DEVICE_GROUP_NOT_EXIST(16, "分组不存在！"),
     DEVICE_NOT_EXIST(17, "设备不存在！"),

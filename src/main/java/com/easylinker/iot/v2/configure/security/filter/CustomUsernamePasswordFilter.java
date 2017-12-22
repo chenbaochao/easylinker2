@@ -47,10 +47,10 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
         if (true && !request.getMethod().equals("POST")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         } else {
-            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginParam, password);
-            this.setDetails(request, authRequest);
 
             try {
+                UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginParam, password);
+                this.setDetails(request, authRequest);
                 authentication = getAuthenticationManager().authenticate(authRequest);
                 JSONObject resultJson = new JSONObject();
                 resultJson.put("state", 0);

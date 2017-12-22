@@ -13,12 +13,8 @@ import com.easylinker.iot.v2.utils.QRCodeGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,7 +77,7 @@ public class UserController {
 
                 if (appUserRepository.findTop1ByUsernameOrEmailOrPhone(username, email, phone) != null) {
                     resultJson.put("state", 0);
-                    resultJson.put("message", FailureMessageEnum.USER_EXIST);
+                    resultJson.put("message", FailureMessageEnum.USER_ALREADY_EXIST);
 
                     /**
                      * 所有的非法条件过滤以后，进行增加用户
@@ -153,6 +149,13 @@ public class UserController {
         return resultJson;
     }
 
+    /**
+     * 查找把一个用户
+     *
+     * @param userId
+     * @return
+     */
+
     @ApiOperation(value = "查找一个用户", notes = "查询一个用户", httpMethod = "GET")
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     public JSONObject findUser(@PathVariable String userId) {
@@ -175,6 +178,7 @@ public class UserController {
 
     /**
      * 设备操作相关
+     * 增加设备
      *
      * @param deviceParamMap
      * @return
@@ -229,6 +233,13 @@ public class UserController {
 
     }
 
+    /**
+     * 查询一个设备信息
+     *
+     * @param deviceId
+     * @return
+     */
+
     @ApiOperation(value = "查找一个设备", notes = "查找增加一个设备", httpMethod = "GET")
     @RequestMapping(value = "/user/device/{deviceId}", method = RequestMethod.GET)
     public JSONObject findDevice(@PathVariable String deviceId) {
@@ -250,6 +261,12 @@ public class UserController {
 
     }
 
+    /**
+     * 删除一个设备
+     *
+     * @param deviceId
+     * @return
+     */
     @ApiOperation(value = "删除一个设备", notes = "删除一个设备", httpMethod = "DELETE")
     @RequestMapping(value = "/user/device/{deviceId}", method = RequestMethod.DELETE)
     public JSONObject deleteDevice(@PathVariable String deviceId) {
@@ -266,6 +283,13 @@ public class UserController {
         }
         return resultJson;
     }
+
+    /**
+     * 更新一个设备
+     *
+     * @param deviceParamMap
+     * @return
+     */
 
     @ApiOperation(value = "更新一个设备", notes = "更新一个设备", httpMethod = "PUT")
     @RequestMapping(value = "/user/device", method = RequestMethod.PUT)
@@ -304,7 +328,6 @@ public class UserController {
         return resultJson;
 
     }
-
 
 
 }
