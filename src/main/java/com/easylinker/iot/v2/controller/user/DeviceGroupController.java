@@ -154,15 +154,15 @@ public class DeviceGroupController {
      * 设备列表
      */
     @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "GET")
-    @RequestMapping(value = "/user/device/devices/{groupId}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
-    public JSONObject devices(@PathVariable String groupId, @PathVariable Integer pageNumber, @PathVariable Integer pageSize) {
+    @RequestMapping(value = "/user/device/devices/{serialNumber}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
+    public JSONObject devices(@PathVariable String serialNumber, @PathVariable Integer pageNumber, @PathVariable Integer pageSize) {
         JSONObject resultJson = new JSONObject();
         if (pageNumber == null || pageSize == null) {
             resultJson.put("state", 0);
             resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
         } else {
             try {
-                DeviceGroup deviceGroup = deviceGroupRepository.findOne(groupId);
+                DeviceGroup deviceGroup = deviceGroupRepository.findOne(serialNumber);
                 if (deviceGroup != null) {
 
                     List<Device> devicePage = deviceRepository.findAllByDeviceGroup(deviceGroup);
