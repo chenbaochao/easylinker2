@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 /**
  * Created by wwhai on 2017/11/24.
  */
@@ -16,7 +18,7 @@ public interface DeviceRepository extends JpaRepository<Device, String> {
 
     Device findTopByOpenId(String openId);
 
-    Page<Device> findAllByDeviceGroup(DeviceGroup deviceGroup);
+    List<Device> findAllByDeviceGroup(DeviceGroup deviceGroup);
 
 
 }

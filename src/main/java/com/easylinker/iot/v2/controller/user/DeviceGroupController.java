@@ -11,7 +11,6 @@ import com.easylinker.iot.v2.repository.DeviceRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,7 +98,7 @@ public class DeviceGroupController {
                 注意 这里删除分组以后，里面的设备也会被删除！
                  */
                 deviceGroupRepository.delete(deviceGroup);
-                List<Device> devices = deviceRepository.findAllByDeviceGroup(deviceGroup).getContent();//删除分组内部的设备
+                List<Device> devices = deviceRepository.findAllByDeviceGroup(deviceGroup);//删除分组内部的设备
                 deviceRepository.delete(devices);
 
                 resultJson.put("state", 1);
@@ -166,7 +165,7 @@ public class DeviceGroupController {
                 DeviceGroup deviceGroup = deviceGroupRepository.findOne(groupId);
                 if (deviceGroup != null) {
 
-                    Page<Device> devicePage = deviceRepository.findAllByDeviceGroup(deviceGroup);
+                    List<Device> devicePage = deviceRepository.findAllByDeviceGroup(deviceGroup);
                     if (devicePage != null) {
                         resultJson.put("state", 1);
                         resultJson.put("data", devicePage);

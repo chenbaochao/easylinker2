@@ -29,4 +29,6 @@ public class EmailSender {
         message.setText("你已经成功注册账户!");
         mailSender.send(message);
     }
+
+
 }

@@ -26,11 +26,11 @@ public class IndexController {
         httpServletResponse.getWriter().write(
                 "<div align=\"center\"><hr>" +
                         "<h1>EasyLinker</h1>\n" +
-                        "Version2.0" +
+                        "<h2>Version2.0</h2>" +
                         "<p>By EasyTeam.2017.10</p>\n" +
                         "<a href=\"swagger-ui.html\">【API文档】</a><br>" +
                         "<a href=\"http://www.easylinker.xyz\">【我们的网站】</a><hr>" +
-                        "<p color=\"blue\">如果你看到这个页面，说明项目启动成功了!本页面仅仅是一个测试页面，如果你要自定义，请修改源代码里面的具体逻辑!</p>"
+                        "<p style=\"color:blue;\" >如果你看到这个页面，说明项目启动成功了!本页面仅仅是一个测试页面，如果你要自定义，请修改源代码里面的具体逻辑!</p>"
                         + "</div>"
         );
         httpServletResponse.getWriter().flush();
