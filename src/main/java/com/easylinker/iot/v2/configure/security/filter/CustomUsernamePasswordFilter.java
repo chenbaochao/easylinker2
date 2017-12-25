@@ -13,6 +13,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 关于这个Filter的理解
@@ -52,15 +53,22 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
                 UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginParam, password);
                 this.setDetails(request, authRequest);
                 authentication = getAuthenticationManager().authenticate(authRequest);
+
+            } catch (Exception e) {
+                logger.error("登录失败");
                 JSONObject resultJson = new JSONObject();
                 resultJson.put("state", 0);
                 resultJson.put("message", "登录失败!");
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(resultJson.toJSONString());
-                response.getWriter().flush();
-            } catch (Exception e) {
-                logger.error("登录失败");
+
+                try {
+                    response.getWriter().write(resultJson.toJSONString());
+                    response.getWriter().flush();
+                } catch (IOException e1) {
+                    //e1.printStackTrace();
+                }
+
             }
         }
         return authentication;

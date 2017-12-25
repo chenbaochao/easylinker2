@@ -1,6 +1,7 @@
 package com.easylinker.iot.v2.model.user;
 
 import com.easylinker.iot.v2.model.base.BaseEntity;
+import com.easylinker.iot.v2.model.device.DeviceGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +31,23 @@ public class AppUser extends BaseEntity implements UserDetails {
     private boolean isAccountNonLocked = true;
     private boolean isCredentialsNonExpired = true;
     private boolean isEnabled = true;
+    /**
+     * 用户的级别
+     * 1 普通用户
+     * 2 付费用户
+     * 3 高级用户
+     */
+    private Integer level = 1;
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+
 
     @JsonIgnore
     @OneToMany(targetEntity = Role.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -66,6 +84,7 @@ public class AppUser extends BaseEntity implements UserDetails {
         simpleGrantedAuthorities.add(new SimpleGrantedAuthority("USER"));
         return simpleGrantedAuthorities;
     }
+
 
     @Override
     public String getPassword() {

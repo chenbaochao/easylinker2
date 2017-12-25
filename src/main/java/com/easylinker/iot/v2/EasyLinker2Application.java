@@ -12,6 +12,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -28,6 +29,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableWebSocket
 @EnableAsync
 @EnableSwagger2
+@EnableTransactionManagement
 public class EasyLinker2Application implements CommandLineRunner {
     private static Logger logger = LoggerFactory.getLogger(EasyLinker2Application.class);
     @Autowired

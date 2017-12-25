@@ -105,7 +105,7 @@ public class Device extends BaseEntity {
     }
 
     @ManyToOne(targetEntity = DeviceGroup.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private DeviceGroup deviceGroup = new DeviceGroup("DEFAULT_GROUP_" + System.currentTimeMillis(), 1L);
+    private DeviceGroup deviceGroup ;
 
     public DeviceGroup getDeviceGroup() {
         return deviceGroup;

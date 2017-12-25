@@ -1,6 +1,7 @@
 package com.easylinker.iot.v2.model.device;
 
 import com.easylinker.iot.v2.model.base.BaseEntity;
+import com.easylinker.iot.v2.model.user.AppUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -23,6 +24,18 @@ public class DeviceGroup extends BaseEntity {
     @JsonIgnore
     @OneToMany(targetEntity = Device.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Device> deviceList;
+
+    @JsonIgnore
+    @ManyToOne(targetEntity = AppUser.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private AppUser appUser;
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
 
     public List<Device> getDeviceList() {
         return deviceList;

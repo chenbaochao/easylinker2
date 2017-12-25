@@ -9,12 +9,16 @@ import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.repository.AppUserRepository;
 import com.easylinker.iot.v2.repository.DeviceGroupRepository;
 import com.easylinker.iot.v2.repository.DeviceRepository;
+import com.easylinker.iot.v2.utils.EmailSender;
 import com.easylinker.iot.v2.utils.QRCodeGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.Map;
 
 /**
@@ -32,28 +36,26 @@ public class UserController {
     AppUserRepository appUserRepository;
     @Autowired
     DeviceRepository deviceRepository;
+
+
+    @Autowired
+    JavaMailSender mailSender;
+
     @Autowired
     DeviceGroupRepository deviceGroupRepository;
 
+    @Autowired
+    EmailSender emailSender;
 
-    @ApiOperation(value = "测试", notes = "测试", httpMethod = "GET")
-    @RequestMapping(value = "/user/test", method = RequestMethod.GET)
-    public JSONObject test() {
-        JSONObject resultJson = new JSONObject();
-        resultJson.put("state", "0");
-        resultJson.put("message", "testOk");
-        return resultJson;
-    }
+
 
     /**
-     * 包含了注册
-     *
-     * @param loginParamMap
-     * @return
+     * 注册
      */
 
     @ApiOperation(value = "增加一个用户", notes = "增加一个用户", httpMethod = "POST")
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
+    @Transactional
     public JSONObject addUser(@RequestBody(required = false) Map<String, String> loginParamMap) {
         JSONObject resultJson = new JSONObject();
         /**
@@ -88,7 +90,21 @@ public class UserController {
                     appUser.setPassword(password);
                     appUser.setPhone(phone);
                     appUser.setEmail(email);
+
+                    DeviceGroup deviceGroup = new DeviceGroup();
+                    deviceGroup.setName("默认组");
+                    deviceGroup.setAppUser(appUser);
+
+                    try {
+                        //sendEmail(email);//发送邮件
+                        emailSender.sendEmail(email);
+                    } catch (Exception e) {
+                        resultJson.put("state", 0);
+                        resultJson.put("message", "系统内部错误!");
+                        return resultJson;
+                    }
                     appUserRepository.save(appUser);
+                    deviceGroupRepository.save(deviceGroup);
                     resultJson.put("state", 1);
                     resultJson.put("data", appUser);
                     resultJson.put("message", SuccessMessageEnum.REGISTER_SUCCESS);
@@ -100,6 +116,7 @@ public class UserController {
              * 抛出空指针的时候，就是参数没有传递
              */
             if (e instanceof NullPointerException) {
+                e.printStackTrace();
                 resultJson.put("state", 0);
                 resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
             }

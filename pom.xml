@@ -80,42 +80,6 @@
             <version>1.2.15</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itextpdf</artifactId>
-            <version>5.5.12</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itext-asian</artifactId>
-            <version>5.2.0</version>
-
-        </dependency>
-        <dependency>
-            <groupId>com.itextpdf.tool</groupId>
-            <artifactId>xmlworker</artifactId>
-            <version>5.5.9</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.6.0</version>
-        </dependency>
-        <!-- JWT Json Web Token 依赖 -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.7.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.2.2</version>
-        </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
@@ -164,6 +128,12 @@
             <groupId>com.upyun</groupId>
             <artifactId>java-sdk</artifactId>
             <version>3.13</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
     </dependencies>
