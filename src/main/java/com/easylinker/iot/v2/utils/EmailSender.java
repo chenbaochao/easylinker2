@@ -3,6 +3,7 @@ package com.easylinker.iot.v2.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,6 +20,7 @@ public class EmailSender {
      *
      * @throws Exception
      */
+    @Async
     public void sendEmail(String toAddress) throws Exception {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("751957846@qq.com");
