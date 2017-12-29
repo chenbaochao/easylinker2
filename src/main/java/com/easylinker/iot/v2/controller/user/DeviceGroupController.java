@@ -151,7 +151,7 @@ public class DeviceGroupController {
 
 
     /**
-     * 设备列表
+     * 设备列表:是一个分组下面的设备列表
      */
     @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "GET")
     @RequestMapping(value = "/user/device/devices/{serialNumber}/{pageNumber}/{pageSize}", method = RequestMethod.GET)

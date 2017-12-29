@@ -37,7 +37,7 @@ public class MqttWillMessageHandler implements MessageHandler {
         try {
 
             String messageString = message.getPayload().toString();
-            System.out.println(messageString);
+            System.out.println("处理上下线消息:" + message);
             JSONObject jsonMessage = (JSONObject) JSONObject.parse(messageString);
             /**
              * 在这里 因为用了EMQ的 MySQL插件 所以 把openId当成username 了

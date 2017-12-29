@@ -15,9 +15,8 @@ public class MyMqttPahoMessageDrivenChannelAdapter extends MqttPahoMessageDriven
     @Override
     public synchronized void connectionLost(Throwable cause) {
         //super.connectionLost(cause);
-        System.out.println("------------------------------"+cause.getMessage());
+        System.out.println("connectionLost" + cause.getMessage());
     }
-
 
 
 }

@@ -1,5 +1,6 @@
 package com.easylinker.iot.v2.configure.mqtt;
 
+import com.easylinker.iot.v2.configure.mqtt.handler.DeviceMessageReceivedHandler;
 import com.easylinker.iot.v2.configure.mqtt.handler.MqttWillMessageHandler;
 import com.easylinker.iot.v2.configure.mqtt.handler.MyMqttPahoMessageDrivenChannelAdapter;
 import com.easylinker.iot.v2.model.device.Device;
@@ -30,7 +31,11 @@ public class MqttConfigure {
     private final String EASY_LINKER_EMQ_USERNAME = "EASY_LINKER";
     private final String EASY_LINKER_EMQ_PASSWORD = "EASY_LINKER";
     //默认监听所有节点的所有客户端的信息
+    private final String DEVICE_CONNECTED = "$SYS/brokers/+/clients/+/connected";
+    private final String DEVICE_DISCONNECTED = "$SYS/brokers/+/clients/+/disconnected";
+    //$SYS/brokers/+/clients/+/disconnected
     private final String EASY_LINKER_MONITOR_TOPIC = "$SYS/brokers/+/clients/+/#";
+    private final String EASY_LINKER_DEVICE_TOPIC = "device/#";
 
     /**
      * mqtt 的工厂  用来创建mqtt连接
@@ -52,7 +57,7 @@ public class MqttConfigure {
             device.setClientId(EASY_LINKER_EMQ_PASSWORD);
             device.setTopic(EASY_LINKER_MONITOR_TOPIC);
             device.setDeviceName(EASY_LINKER_EMQ_USERNAME);
-            device.setDeviceDescribe("EASY_LINKER");
+            device.setDeviceDescribe("EASY_LINKER_MONITOR");
             deviceRepository.save(device);
         }
 
@@ -71,16 +76,31 @@ public class MqttConfigure {
      */
 
     @Bean
-    public MessageProducerSupport mqttInbound() {
+    public MessageProducerSupport mqttMessageHandler() {
 
         MqttPahoMessageDrivenChannelAdapter adapter = new MyMqttPahoMessageDrivenChannelAdapter(
-                EASY_LINKER_EMQ_USERNAME,
+                "mqttMessageHandler",
                 mqttClientFactory());
-
-        adapter.addTopic(EASY_LINKER_MONITOR_TOPIC);
+        adapter.addTopic(EASY_LINKER_DEVICE_TOPIC);//监控消息
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
-        adapter.setQos(1);
+        adapter.setQos(2);
+        return adapter;
+    }
+
+
+    @Bean
+    public MessageProducerSupport mqttClientHandler() {
+
+        MqttPahoMessageDrivenChannelAdapter adapter = new MyMqttPahoMessageDrivenChannelAdapter(
+                "mqttClientHandler",
+                mqttClientFactory());
+        adapter.addTopic(DEVICE_CONNECTED);//监控上线通知
+        adapter.addTopic(DEVICE_DISCONNECTED);//监控下线通知
+
+        adapter.setCompletionTimeout(5000);
+        adapter.setConverter(new DefaultPahoMessageConverter());
+        adapter.setQos(2);
         return adapter;
     }
 
@@ -91,10 +111,17 @@ public class MqttConfigure {
      */
 
     @Bean
-    public IntegrationFlow mqttInFlow() {
-        return IntegrationFlows.from(mqttInbound())
+    public IntegrationFlow mqttDeviceInFlow() {
+        return IntegrationFlows.from(mqttClientHandler())
                 .handle(new MqttWillMessageHandler())
+
                 .get();
     }
 
+    @Bean
+    public IntegrationFlow mqttMessageInFlow() {
+        return IntegrationFlows.from(mqttMessageHandler())
+                .handle(new DeviceMessageReceivedHandler())
+                .get();
+    }
 }
