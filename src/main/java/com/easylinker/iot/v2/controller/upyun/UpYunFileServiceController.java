@@ -1,4 +1,4 @@
-package com.easylinker.iot.v2.controller.user;
+package com.easylinker.iot.v2.controller.upyun;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Created by wwhai on 2017/12/7.
  */
-@Api(value = "又拍云文件存储服务", description = "又拍云文件存储服务")
+@Api(value = "又拍云文件存储服务", description = "又拍云文件存储服务", tags = "又拍云文件存储服务")
 
 @RestController
 @RequestMapping("/file")

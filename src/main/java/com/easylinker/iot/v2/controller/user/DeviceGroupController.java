@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Created by wwhai on 2017/12/15.
  */
-@Api(value = "设备组管理", description = "用户的设备组管理")
+@Api(value = "设备组管理", description = "用户的设备组管理",tags = "设备组操作")
 @RestController
 
 public class DeviceGroupController {
@@ -176,7 +176,7 @@ public class DeviceGroupController {
                     }
                 } else {
                     resultJson.put("state", 0);
-                    resultJson.put("message", "分组不存在!");
+                    resultJson.put("message", "请求必须附带分组序列号!");
                 }
 
 

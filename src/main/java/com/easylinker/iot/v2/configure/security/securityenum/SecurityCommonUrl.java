@@ -11,21 +11,12 @@ public enum SecurityCommonUrl {
     DEFAULT_USER_OPERATE_PATH("注册入口", "/user/register"),
     DEFAULT_STATIC_PATH("默认静态资源的路径", "/static/**"),
     DEFAULT_AVATAR_PATH("默认头像的路径", "/avatar/**"),
-    DEFAULT_TEST_PATH("默认测试接口", "/test"),
-    DEFAULT_INDEX_PATH("默认首页", "/index"),
-    DEFAULT_DOCUMENT_PATH("默认文档页面", "/document"),
-    DEFAULT_PDF_URL("默认的PDF输出目录", "/api/pdf");
+    DEFAULT_TEST_PATH("默认测试接口", "/testLogin"),
+    DEFAULT_INDEX_PATH("默认首页", "/index");
 
     public static final String[] SWAGGER_UI_MATCHER = new String[]{
             "/v2/api-docs",
-            "/swagger-resources/configuration/ui",
-            "/swagger-resources",
-            "/swagger-resources/configuration/security",
-            "/configuration/ui",
-            "/swagger-resources",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**"
+            "/docs.html"
     };
     private String name;
     private String url;

@@ -28,7 +28,7 @@ public class SwaggerConfigure  {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("EasyLinker RESTFUL APIs")
+                .title("EasyLinker RESTFUL APIs(HTTP)")
                 .description("相关文章请关注：http://www.easylinker.xyz/")
                 .termsOfServiceUrl("http://www.easylinker.xyz/")
                 .contact("wwhai:751957846@qq.com")

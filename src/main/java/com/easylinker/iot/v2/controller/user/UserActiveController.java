@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 账号激活
  * Created by wwhai on 2017/12/25.
  */
-@Api(value = "激活账号", description = "用户账号激活")
+@Api(value = "激活账号", description = "用户账号激活", tags = "用户激活")
 @RestController
 public class UserActiveController {
     @Autowired

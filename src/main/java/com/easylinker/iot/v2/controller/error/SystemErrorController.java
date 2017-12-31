@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 默认的错误处理信息
  */
 @RestController
-@Api(value = "系统错误", description = "系统错误")
+@Api(value = "系统错误", description = "系统错误", hidden = true, tags = "系统内部错误")
 
 public class SystemErrorController {
     @ApiOperation(value = "系统错误", notes = "系统错误表", httpMethod = "GET")

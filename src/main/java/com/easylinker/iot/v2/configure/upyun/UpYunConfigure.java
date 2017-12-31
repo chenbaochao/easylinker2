@@ -27,7 +27,8 @@ public class UpYunConfigure {
                 FormUploader(
                 bucketName,
                 apiKey,
-                e -> null);
+                s -> "Up云集成失败!请检查配置"
+        );
     }
 
     @Bean

@@ -21,7 +21,7 @@ import java.util.Map;
  * Created by wwhai on 2017/11/25.
  * 这个用来提供EMQ交互，管理设备等等
  */
-@Api(value = "EMQ设备管理操作相关", description = "EMQ设备管理操作相关")
+@Api(value = "EMQ设备管理操作相关", description = "EMQ设备管理操作相关", tags = "EMQ 核心API")
 @RestController
 @RequestMapping("/emq")
 /**
@@ -69,7 +69,6 @@ public class EmqRESTApiController {
     }
 
     /**
-     *
      * @param messageMap
      * @return
      */

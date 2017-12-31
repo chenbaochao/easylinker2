@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by wwhai on 2017/11/15.
  * 后天管理控制器
  */
-@Api(value = "管理员的操作相关", description = "管理员的相关操作")
+@Api(value = "管理员的操作相关", description = "管理员的相关操作", tags = "管理员操作")
 @RestController
 @RequestMapping("/admin")
 public class AdminController {

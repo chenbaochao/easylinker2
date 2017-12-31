@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by wwhai on 2017/11/27.
  * 集成短信发送
  */
-@Api(value = "发送短信API", description = "发送短信的HTTP接口")
+@Api(value = "发送短信API", description = "发送短信的HTTP接口",tags = "短信发送")
 @RestController
 @RequestMapping("/sms")
 public class SMSController {

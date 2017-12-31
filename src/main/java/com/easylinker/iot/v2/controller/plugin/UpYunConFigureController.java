@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by wwhai on 2017/11/27.
  * 集成又拍云
  */
-@Api(value = "又拍云的配置操作", description = "又拍云的配置操作")
+@Api(value = "又拍云的配置操作", description = "又拍云的配置操作", hidden = true, tags = "又拍云配置")
 
 @RestController
 @RequestMapping("/upyun")

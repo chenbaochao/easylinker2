@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 
-@Api(value = "网站首页控制", description = "首页控制")
+@Api(value = "网站首页控制", description = "首页控制", tags = "默认前端首页")
 public class IndexController {
 
 
@@ -28,7 +28,7 @@ public class IndexController {
                         "<h1>EasyLinker</h1>\n" +
                         "<h2>Version2.0</h2>" +
                         "<p>By EasyTeam.2017.10</p>\n" +
-                        "<a href=\"swagger-ui.html\">【API文档】</a><br>" +
+                        "<a href=\"docs.html\">【API文档】</a><br>" +
                         "<a href=\"http://www.easylinker.xyz\">【我们的网站】</a><hr>" +
                         "<p style=\"color:blue;\" >如果你看到这个页面，说明项目启动成功了!本页面仅仅是一个测试页面，如果你要自定义，请修改源代码里面的具体逻辑!</p>"
                         + "</div>"
