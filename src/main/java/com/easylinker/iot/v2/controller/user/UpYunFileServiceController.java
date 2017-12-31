@@ -4,9 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.FailureMessageEnum;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
-import com.easylinker.iot.v2.model.config.UpYunAccount;
 import com.easylinker.iot.v2.model.user.AppUser;
-import com.easylinker.iot.v2.repository.UpYunAccountRepository;
 import com.easylinker.iot.v2.utils.FilePathHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,11 +32,13 @@ import java.util.Map;
 @RequestMapping("/file")
 public class UpYunFileServiceController {
 
-    @Autowired
-    UpYunAccountRepository upYunAccountRepository;
-
     public static final String SAVE_URL = "/EASY_LINKER/USER/";
 
+
+    @Autowired
+    UpYun upYun;
+    @Autowired
+    FormUploader formUploader;
 
     /**
      * 上传文件 注意 是Form形式 不能用JSON
@@ -47,15 +47,11 @@ public class UpYunFileServiceController {
      * @return
      * @throws Exception
      */
+
+
     @ApiOperation(value = "上传文件", notes = "以数组的形式上传，注意，是formdata形式", httpMethod = "POST")
     @RequestMapping("/upload")
     public JSONObject upload(@RequestParam(name = "files") MultipartFile[] multipartFiles) throws Exception {
-        UpYunAccount upYunAccount = upYunAccountRepository.findTopById("EASY_LINKER");
-        FormUploader uploader = new
-                FormUploader(
-                upYunAccount.getBucketName(),
-                upYunAccount.getApiKey(),
-                e -> null);
 
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         JSONArray resultArray = new JSONArray();
@@ -75,7 +71,7 @@ public class UpYunFileServiceController {
             String savePath = SAVE_URL + appUser.getId() + "/" + file.getName();
             Map<String, Object> paramsMap = new HashMap<>();
             paramsMap.put(Params.SAVE_KEY, savePath);
-            Result result = uploader.upload(paramsMap, file);
+            Result result = formUploader.upload(paramsMap, file);
             if (result.isSucceed()) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("state", 1);
@@ -105,14 +101,7 @@ public class UpYunFileServiceController {
 
     @RequestMapping(value = "/deleteFiles", method = RequestMethod.POST)
     public JSONObject deleteFiles(@RequestBody JSONObject filesJson) {
-        UpYunAccount upYunAccount = upYunAccountRepository.findTopById("EASY_LINKER");
-        UpYun upYun = new
 
-                UpYun(
-                upYunAccount.getBucketName(),
-                upYunAccount.getUsername(),
-                upYunAccount.getPassword()
-        );
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         JSONObject resultJson = new JSONObject();
         JSONObject deleteResultJson = new JSONObject();
@@ -147,14 +136,7 @@ public class UpYunFileServiceController {
 
     @RequestMapping("/files")
     public JSONObject files() {
-        UpYunAccount upYunAccount = upYunAccountRepository.findTopById("EASY_LINKER");
-        UpYun upYun = new
 
-                UpYun(
-                upYunAccount.getBucketName(),
-                upYunAccount.getUsername(),
-                upYunAccount.getPassword()
-        );
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         JSONObject resultJson = new JSONObject();
         JSONArray resultArray = new JSONArray();

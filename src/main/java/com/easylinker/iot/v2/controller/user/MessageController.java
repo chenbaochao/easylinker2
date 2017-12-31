@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
 import com.easylinker.iot.v2.emq.EMQApiProvider;
+import com.easylinker.iot.v2.model.device.Device;
+import com.easylinker.iot.v2.model.device.DeviceData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,7 @@ public class MessageController {
         JSONArray deviceIdArray = pushBody.getJSONArray("deviceIdArray");
         String message = pushBody.getString("message");
         Integer qos = pushBody.getInteger("qos");
+        String unit=pushBody.getString("unit");
         Boolean retain = pushBody.getBoolean("retain");
         for (Object id : deviceIdArray) {
             JSONObject jsonObject = new JSONObject();
@@ -52,7 +55,7 @@ public class MessageController {
             jsonObject.put("qos", qos);
             jsonObject.put("retain", retain);
             jsonObject.put("client_id", "http");
-            System.out.println(jsonObject);
+
             emqApiProvider.publishMessage(jsonObject);
         }
         resultJson.put("message", SuccessMessageEnum.OPERATE_SUCCESS);

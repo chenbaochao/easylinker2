@@ -26,8 +26,8 @@ import org.springframework.stereotype.Component;
  * "ts":1512057028
  * }
  */
-@Component
-public class MqttWillMessageHandler implements MessageHandler {
+//@Component
+public class MqttClientWillMessageHandler implements MessageHandler {
     @Autowired
     DeviceRepository deviceRepository;
 
