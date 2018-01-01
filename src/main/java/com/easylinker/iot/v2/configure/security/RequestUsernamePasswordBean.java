@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 public class RequestUsernamePasswordBean {
     public static final String USERNAME_PARAM = "loginParam";
     public static final String PASSWORD_PARAM = "password";
-    public static final String CHECK_CODE_PARAM = "check_code";
 
     private String username;
     private String password;
