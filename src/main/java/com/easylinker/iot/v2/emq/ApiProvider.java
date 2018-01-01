@@ -2,6 +2,7 @@ package com.easylinker.iot.v2.emq;
 
 import com.alibaba.fastjson.JSONObject;
 import com.squareup.okhttp.OkHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URL;
 
@@ -10,6 +11,11 @@ import java.net.URL;
  * 这个是EMQ的API封装
  */
 public abstract class ApiProvider {
+    @Autowired
+    EMQApiHttpSender emqApiHttpSender;
+
+    @Autowired
+    BaseAuthHeaderProvider baseAuthHeaderProvider;
 
     protected OkHttpClient okHttpClient;
 
@@ -41,7 +47,7 @@ public abstract class ApiProvider {
 
     public JSONObject getEmqManagementInfo(String apiUrl) {
 
-        return EMQApiHttpSender.sendHttpGet(BaseAuthHeaderProvider.LOCAL_HOST_NODE + apiUrl);
+        return emqApiHttpSender.sendHttpGet(baseAuthHeaderProvider.API_HOST_NODE + apiUrl);
     }
 
     /**
@@ -53,7 +59,7 @@ public abstract class ApiProvider {
      */
     public JSONObject postEmqManagementInfo(String apiUrl, JSONObject jsonObject) {
 
-        return EMQApiHttpSender.sendHttpPostRequestBody(BaseAuthHeaderProvider.LOCAL_HOST_NODE + apiUrl, jsonObject);
+        return emqApiHttpSender.sendHttpPostRequestBody(baseAuthHeaderProvider.API_HOST_NODE + apiUrl, jsonObject);
     }
 
 

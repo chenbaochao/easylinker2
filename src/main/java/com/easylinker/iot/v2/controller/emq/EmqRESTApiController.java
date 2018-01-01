@@ -13,9 +13,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by wwhai on 2017/11/25.
@@ -55,70 +56,19 @@ public class EmqRESTApiController {
         return emqApiProvider.getNodeInformation(nodeName);
     }
 
-    @ApiOperation(value = "获取具体的一个节点上的设备列表", notes = "获取具体的一个节点上的设备列表", httpMethod = "GET")
+    @ApiOperation(value = "获取具体的一个节点上的所有设备列表", notes = "获取具体的一个节点上的设备列表", httpMethod = "GET")
     @RequestMapping(value = "/getClientsOnNode/{nodeName:.+}", method = RequestMethod.GET)
     public JSONObject getClientsOnNode(@PathVariable String nodeName) {
         return emqApiProvider.getClientsOnNode(nodeName);
     }
 
-    @ApiOperation(value = "获取具体的一个节点上的设备", notes = "获取具体的一个节点上的设备", httpMethod = "GET")
+    @ApiOperation(value = "获取具体的一个节点上的具体设备", notes = "获取具体的一个节点上的设备", httpMethod = "GET")
     @RequestMapping(value = "/getClientInformationOnNode/{nodeName:.+}/{clientId}", method = RequestMethod.GET)
 
     public JSONObject getClientInformationOnNode(@PathVariable String nodeName, @PathVariable String clientId) {
         return emqApiProvider.getClientInformationOnNode(nodeName, clientId);
     }
 
-    /**
-     * @param messageMap
-     * @return
-     */
-    @ApiOperation(value = "发布消息", notes = "发布消息", httpMethod = "POST")
-    @RequestMapping(value = "/publish", method = RequestMethod.POST)
-
-    public JSONObject publish(@RequestBody Map<String, Object> messageMap) {
-        JSONObject resultJson = new JSONObject();
-        /**
-         *这里比较坑  一定要按照规定格式
-         * HTTP传过来的是字符串   但是  Boolean 值需要转换
-         * 还有 qos 也需要转换
-         */
-        String unit = messageMap.get("unit").toString();
-        String topic = messageMap.get("topic").toString();
-        String payload = messageMap.get("payload").toString();
-        Integer qos = Integer.parseInt(messageMap.get("qos").toString());
-        Boolean retain = (Boolean) messageMap.get("retain");
-        JSONObject messageJson = new JSONObject();
-
-        messageJson.put("unit", unit);
-        messageJson.put("topic", topic);
-        messageJson.put("payload", payload);
-        messageJson.put("qos", qos);
-        messageJson.put("retain", retain.booleanValue());
-        messageJson.put("client_id", "http");
-
-        if (retain) {//判断是否持久化
-            Device device = deviceRepository.findTopByOpenId(topic.split("/")[1].toString());
-            if (device != null) {
-                DeviceData deviceData = new DeviceData();
-                deviceData.setData(payload);
-                deviceData.setDevice(device);
-                deviceData.setUnit(unit);
-                deviceDataRepository.save(deviceData);
-            }
-
-        }
-
-
-        if (Integer.parseInt(emqApiProvider.publishMessage(messageJson).get("code").toString()) != 0) {
-            resultJson.put("state", 0);
-            resultJson.put("message", "推送失败");
-        } else {
-            resultJson.put("state", 1);
-            resultJson.put("message", "推送成功");
-        }
-
-        return resultJson;
-    }
 
     @ApiOperation(value = "获取设备的数据列表", notes = "获取设备的数据列表", httpMethod = "GET")
     @RequestMapping(value = "/getDeviceDataList/{deviceId}/{pageNumber}/{pageSize}", method = RequestMethod.GET)

@@ -3,6 +3,8 @@ package com.easylinker.iot.v2.emq;
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.FailureMessageEnum;
 import com.squareup.okhttp.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -10,7 +12,9 @@ import java.io.IOException;
  * Created by wwhai on 2017/11/26.
  * 这个用来发送HTTp请求
  */
+@Component
 public class EMQApiHttpSender {
+
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     protected static OkHttpClient okHttpClient = new OkHttpClient();
@@ -19,8 +23,10 @@ public class EMQApiHttpSender {
         return okHttpClient;
     }
 
+    @Autowired
+    BaseAuthHeaderProvider baseAuthHeaderProvider;
 
-    public static JSONObject sendHttpGet(String url) {
+    public JSONObject sendHttpGet(String url) {
 
 
         JSONObject resultJson = new JSONObject();
@@ -29,7 +35,7 @@ public class EMQApiHttpSender {
             Request request = new Request.Builder()
                     .url(url)
                     .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
-                    .addHeader("Authorization", BaseAuthHeaderProvider.getBaseAuthHeader())
+                    .addHeader("Authorization", baseAuthHeaderProvider.getBaseAuthHeader())
                     .build();
 
             Response response = getOkHttpClient().newCall(request).execute();
@@ -48,7 +54,7 @@ public class EMQApiHttpSender {
     }
 
 
-    public static JSONObject sendHttpPostRequestBody(String url, JSONObject jsonObject) {
+    public JSONObject sendHttpPostRequestBody(String url, JSONObject jsonObject) {
 
         JSONObject returnJson = null;
         try {
@@ -56,7 +62,7 @@ public class EMQApiHttpSender {
             Request request = new Request
                     .Builder()
                     .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
-                    .addHeader("Authorization", BaseAuthHeaderProvider.getBaseAuthHeader())
+                    .addHeader("Authorization", baseAuthHeaderProvider.getBaseAuthHeader())
                     .post(requestBody)
                     .url(url)
                     .build();
