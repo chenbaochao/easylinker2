@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
  * 默认包含了  用户名  密码  验证码
  */
 public class RequestUsernamePasswordBean {
-    public static final String USERNAME_PARAM = "username";
+    public static final String USERNAME_PARAM = "loginParam";
     public static final String PASSWORD_PARAM = "password";
     public static final String CHECK_CODE_PARAM = "check_code";
 

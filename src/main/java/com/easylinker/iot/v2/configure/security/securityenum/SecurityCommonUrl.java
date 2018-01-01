@@ -16,7 +16,8 @@ public enum SecurityCommonUrl {
 
     public static final String[] SWAGGER_UI_MATCHER = new String[]{
             "/v2/api-docs",
-            "/docs.html"
+            "/docs.html",
+            "/webjars/**"
     };
     private String name;
     private String url;

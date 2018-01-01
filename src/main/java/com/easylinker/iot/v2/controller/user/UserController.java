@@ -46,30 +46,7 @@ public class UserController {
     public JSONObject testUserLogin() {
         JSONObject resultJson = new JSONObject();
         resultJson.put("message", "这个仅仅是用来测试登录的，系统的登录地址是:/userLogin");
-        resultJson.put("data", "{\n" +
-                "    \"data\": {\n" +
-                "        \"accountNonExpired\": true,\n" +
-                "        \"accountNonLocked\": true,\n" +
-                "        \"authorities\": [\n" +
-                "            {\n" +
-                "                \"authority\": \"USER\"\n" +
-                "            }\n" +
-                "        ],\n" +
-                "        \"avatar\": \"/avatar/avatar12.png\",\n" +
-                "        \"createTime\": 1514383133000,\n" +
-                "        \"credentialsNonExpired\": true,\n" +
-                "        \"email\": \"751957846@@qq.com\",\n" +
-                "        \"enabled\": true,\n" +
-                "        \"id\": \"6a2d99b0-0fe5-461c-8b00-36a9d5204433\",\n" +
-                "        \"isDelete\": 0,\n" +
-                "        \"level\": 1,\n" +
-                "        \"password\": \"wwhai\",\n" +
-                "        \"phone\": \"110\",\n" +
-                "        \"username\": \"wwhai\"\n" +
-                "    },\n" +
-                "    \"state\": 1,\n" +
-                "    \"message\": \"LOGIN_SUCCESS\"\n" +
-                "}");
+        resultJson.put("data", "登录地址:/userLogin,参数:loginParam,password");
         resultJson.put("state", 1);
         return resultJson;
     }
