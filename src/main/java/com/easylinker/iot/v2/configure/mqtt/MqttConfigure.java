@@ -29,16 +29,13 @@ public class MqttConfigure {
     @Autowired
     DeviceRepository deviceRepository;
 
-    /**
-     * 默认连接的是本机的EMQ节点 这里为了开发 写死了
-     */
     @Value("${easylinker.emq.host}")
     private String EMQ_URL;
     private final String EMQ_USERNAME = "EASY_LINKER";
     private final String EMQ_PASSWORD = "EASY_LINKER";
     //默认监听所有节点的所有客户端的信息
-    private final String DEVICE_CONNECTED = "$SYS/brokers/+/clients/+/connected";
-    private final String DEVICE_DISCONNECTED = "$SYS/brokers/+/clients/+/disconnected";
+    //private final String DEVICE_CONNECTED = "$SYS/brokers/+/clients/+/connected";
+    // private final String DEVICE_DISCONNECTED = "$SYS/brokers/+/clients/+/disconnected";
     private final String MONITOR_TOPIC = "$SYS/brokers/+/clients/+/#";
     private final String DEVICE_TOPIC = "device/#";
 
@@ -48,7 +45,7 @@ public class MqttConfigure {
      * @return
      */
 
-    @Bean
+    @Bean(name = "mqttMonitorFactory")
     public MqttPahoClientFactory mqttMonitorFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
         /**
@@ -120,7 +117,7 @@ public class MqttConfigure {
      * @return
      */
 
-    @Bean
+    @Bean(name = "mqttClientInFlow")
     public IntegrationFlow mqttClientInFlow() {
         logger.info("加载客户端处理器....");
         return IntegrationFlows.from(mqttClientHandler())
@@ -129,8 +126,7 @@ public class MqttConfigure {
     }
 
 
-
-    @Bean
+    @Bean(name = "mqttMessageInFlow")
     public IntegrationFlow mqttMessageInFlow() {
         logger.info("加载客户端消息处理器....");
         return IntegrationFlows.from(mqttMessageHandler())
