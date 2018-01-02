@@ -129,6 +129,7 @@ public class MqttConfigure {
     }
 
 
+
     @Bean
     public IntegrationFlow mqttMessageInFlow() {
         logger.info("加载客户端消息处理器....");
