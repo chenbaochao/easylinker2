@@ -1,7 +1,6 @@
 package com.easylinker.iot.v2.model.device;
 
 import com.easylinker.iot.v2.model.base.BaseEntity;
-import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.utils.MD5Generator;
 
 import javax.persistence.*;
@@ -46,11 +45,11 @@ public class Device extends BaseEntity {
     private String ipAddress;
     private Integer allow = 1;
     private Integer access = 3;
-    private String topic = "device/" + getOpenId();
+    private String topic = getOpenId();
 
 
     @ManyToOne(targetEntity = DeviceGroup.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private DeviceGroup deviceGroup ;
+    private DeviceGroup deviceGroup;
 
     public boolean isOnline() {
         return isOnline;
@@ -107,7 +106,6 @@ public class Device extends BaseEntity {
     public void setQrCode(String qrCode) {
         this.qrCode = qrCode;
     }
-
 
 
     public DeviceGroup getDeviceGroup() {

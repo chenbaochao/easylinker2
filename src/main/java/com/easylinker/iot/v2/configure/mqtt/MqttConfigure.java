@@ -49,25 +49,23 @@ public class MqttConfigure {
      */
 
     @Bean
-    public MqttPahoClientFactory mqttClientFactory() {
+    public MqttPahoClientFactory mqttMonitorFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
         /**
          * 后面这里的配置要从数据库里面加载
          */
 
-
         if (deviceRepository.findTopByDeviceName(EMQ_USERNAME) == null) {
             logger.info("创建默认连接账号....");
             Device device = new Device();
             device.setOpenId(EMQ_USERNAME);
-            device.setClientId(EMQ_PASSWORD);
-            device.setTopic(MONITOR_TOPIC);
+            device.setClientId(EMQ_USERNAME);
             device.setDeviceName(EMQ_USERNAME);
-            device.setDeviceDescribe("MONITOR");
+            device.setDeviceDescribe("EasyLinker监控器");
+            device.setTopic(MONITOR_TOPIC);
             deviceRepository.save(device);
             logger.info("创建默认连接账号成功");
         }
-
 
         factory.setServerURIs(EMQ_URL);
         factory.setUserName(EMQ_USERNAME);
@@ -76,54 +74,43 @@ public class MqttConfigure {
         return factory;
     }
 
+
     /**
-     * 这个Bean用来配置处理接受消息的处理器
+     * 用来配置处理接受消息的处理器
      *
      * @return
      */
 
-    @Bean
+    @Bean(name = "mqttMessageHandler")
     public MessageProducerSupport mqttMessageHandler() {
         logger.info("加载消息监听插件....");
 
         MqttPahoMessageDrivenChannelAdapter adapter = new MyMqttPahoMessageDrivenChannelAdapter(
                 "mqttMessageHandler",
-                mqttClientFactory());
+                mqttMonitorFactory());
         adapter.addTopic(DEVICE_TOPIC);//监控消息
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
-        adapter.setQos(2);
         logger.info("加载消息监听插件成功");
 
         return adapter;
     }
 
-    @Bean
-    public IntegrationFlow mqttMessageInFlow() {
-        logger.info("加载客户端消息处理器....");
 
-        return IntegrationFlows.from(mqttMessageHandler())
-                .handle(new DeviceMessageReceivedHandler())
-                .get();
-    }
+    /**
+     * 用来配置处理客户端连接消息的处理器
+     *
+     * @return
+     */
 
-
-    @Bean
+    @Bean(name = "mqttClientHandler")
     public MessageProducerSupport mqttClientHandler() {
-        logger.info("加载客户端监听插件....");
-
-
         MqttPahoMessageDrivenChannelAdapter adapter = new MyMqttPahoMessageDrivenChannelAdapter(
                 "mqttClientHandler",
-                mqttClientFactory());
-        adapter.addTopic(DEVICE_CONNECTED);//监控上线通知
-        adapter.addTopic(DEVICE_DISCONNECTED);//监控下线通知
-
+                mqttMonitorFactory());
+        adapter.addTopic(MONITOR_TOPIC);//监控消息
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
-        adapter.setQos(2);
-        logger.info("加载客户端监听插件成功");
-
         return adapter;
     }
 
@@ -142,4 +129,11 @@ public class MqttConfigure {
     }
 
 
+    @Bean
+    public IntegrationFlow mqttMessageInFlow() {
+        logger.info("加载客户端消息处理器....");
+        return IntegrationFlows.from(mqttMessageHandler())
+                .handle(new DeviceMessageReceivedHandler())
+                .get();
+    }
 }

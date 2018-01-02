@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by wwhai on 2017/12/30.
@@ -46,6 +45,7 @@ public class DeviceMessageReceivedHandler implements MessageHandler {
     @Override
     public void handleMessage(Message<?> message) throws MessagingException {
         try {
+            System.out.println("来自客户端的消息:" + message);
 
             JSONObject payloadJson = JSONObject.parseObject(message.getPayload().toString());
             String deviceMessage = payloadJson.getString("message");
