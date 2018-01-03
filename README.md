@@ -34,7 +34,7 @@ EMQ下载地址:http://emqtt.com/downloads
 # 架构图  
 ![](github_assets/struct.png)  
 
-#配置教程  
+# 配置教程  
 ## EasyLinker配置  
 application.properties配置
 ```aidl
