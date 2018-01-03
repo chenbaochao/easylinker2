@@ -160,12 +160,12 @@ public class MqttConfigure {
      *
      * @return
      */
-    @Bean("mqttInbound")
-    public MessageProducerSupport mqttInbound() {
+    @Bean("mqttClientInbound")
+    public MessageProducerSupport mqttClientInbound() {
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(
-                "mqttInbound",
+                "mqttClientInbound",
                 mqttClientFactory());
-        adapter.addTopic("$SYS/brokers/+/clients/+/#");
+        adapter.addTopic("$SYS/brokers/+/clients/+/#");//监控设备消息上下线
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
@@ -177,9 +177,9 @@ public class MqttConfigure {
      *
      * @return
      */
-    @Bean("mqttInFlow")
-    public IntegrationFlow mqttInFlow() {
-        return IntegrationFlows.from(mqttInbound())
+    @Bean("mqttClientInFlow")
+    public IntegrationFlow mqttClientInFlow() {
+        return IntegrationFlows.from(mqttClientInbound())
                 .handle(new MqttClientWillMessageHandler())
                 .get();
     }
@@ -199,7 +199,7 @@ public class MqttConfigure {
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(
                 "mqttMessageInBound",
                 mqttClientFactory());
-        adapter.addTopic("device/#");
+        adapter.addTopic("device/#");//监控设备消息
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
