@@ -31,6 +31,8 @@ EMQ下载地址:http://emqtt.com/downloads
 6.附带一个微型博客，用户共享示例; 
 7.附带一个APP来管理后台设备;
 >
+# 架构图  
+![](github_assets/struct.png)
 #配置教程  
 ## EasyLinker配置  
 application.properties配置
