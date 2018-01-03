@@ -159,7 +159,7 @@ mqtt.acl_nomatch = allow
 # 停止emqttd
 ./bin/emqttd stop
 ```
-# 客户端连接代码EMO
+# 客户端连接代码DEMO
 ## 1.Python客户端代码示例(控制树莓派40号引脚的电平)
 ```
 #说明：需要安装paho-mqt库,命令:pip install paho-mqtt
