@@ -35,6 +35,40 @@
 6.附带一个微型博客，用户共享示例; 
 7.附带一个APP来管理后台设备;
 >
+## Python客户端代码示例(控制树莓派40号引脚的电平)
+```
+#说明：需要安装paho-mqt库,命令:pip install paho-mqtt
+#[8305132bc868fa613dfa2fa3eac6053a] 这个是设备的openId
+import RPi.GPIO as GPIO
+import paho.mqtt.client as mqtt
+import time
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(40, GPIO.OUT)
+
+def on_connect(client, userdata, flags, rc):
+    print("Connected Success! "+str(rc))
+    client.subscribe("device/8305132bc868fa613dfa2fa3eac6053a")
+    file = open("/sys/class/thermal/thermal_zone0/temp")
+    temp = float(file.read()) / 1000
+    data={ "qos":1, "retain":"true","unit":"C", "message":str(temp)}
+    client.publish("device/8305132bc868fa613dfa2fa3eac6053a", str(data))     
+    file.close()
+    time.sleep(6)
+
+def on_message(client, userdata, msg):
+    print("received:"+str(msg.payload))
+    if(str(msg.payload)=="ON"):
+        GPIO.output(40, GPIO.LOW)
+    elif(str(msg.payload)=="OFF"):
+        GPIO.output(40, GPIO.HIGH)
+
+client = mqtt.Client("8305132bc868fa613dfa2fa3eac6053a")
+client.on_connect = on_connect
+client.on_message = on_message
+client.username_pw_set("8305132bc868fa613dfa2fa3eac6053a","8305132bc868fa613dfa2fa3eac6053a")
+client.connect("192.168.3.64", 1883, 60)
+client.loop_forever()
+```
 
 
 
