@@ -54,7 +54,6 @@ public class MessageController {
         JSONArray deviceIdArray = pushBody.getJSONArray("deviceIdArray");
         String message = pushBody.getString("message");
         Integer qos = pushBody.getInteger("qos");
-        String unit = pushBody.getString("unit");
         Boolean retain = pushBody.getBoolean("retain");
         for (Object id : deviceIdArray) {
             JSONObject jsonObject = new JSONObject();
