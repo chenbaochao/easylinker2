@@ -3,9 +3,12 @@ package com.easylinker.iot.v2.configure.mqtt.handler;
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.model.device.Device;
 import com.easylinker.iot.v2.repository.DeviceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +31,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MqttClientWillMessageHandler implements MessageHandler {
+    Logger logger = LoggerFactory.getLogger(MqttClientWillMessageHandler.class);
     @Autowired
     DeviceRepository deviceRepository;
 
@@ -35,31 +39,29 @@ public class MqttClientWillMessageHandler implements MessageHandler {
     @Override
     public void handleMessage(Message<?> message) throws MessagingException {
         try {
-
             String messageString = message.getPayload().toString();
-            System.out.println("处理上下线消息:" + message);
             JSONObject jsonMessage = (JSONObject) JSONObject.parse(messageString);
             /**
              * 在这里 因为用了EMQ的 MySQL插件 所以 把openId当成username 了
              * SQl这么写的 select open_id as username ..........
              */
-            String openId = jsonMessage.get("clientid").toString();
-            Device device = deviceRepository.findTopByOpenId(openId);
-            if (device != null) {
-                if (device.isOnline()) {
-                    device.setOnline(false);
-                    System.out.println("Device " + device.getDeviceName() + " 下线");
-                } else if (!device.isOnline()) {
-                    device.setOnline(true);
-                    System.out.println("Device " + device.getDeviceName() + " 上线");
-                }
+            Device device = deviceRepository.findTopByOpenId(jsonMessage.get("username").toString());
+            MessageHeaders headers = message.getHeaders();
+            String topic = headers.get("mqtt_topic", String.class);
+            if (topic.endsWith("/connected")) {
+                logger.info("设备[" + device.getOpenId() + "]上线了！");
+                device.setOnline(true);
                 deviceRepository.save(device);
-                deviceRepository.flush();
 
+            } else if (topic.endsWith("/disconnected")) {
+                logger.info("设备[" + device.getOpenId() + "]下线了！");
+                device.setOnline(false);
+                deviceRepository.save(device);
             }
+
+
         } catch (Exception e) {
-            //Json 解析出错
-            System.out.println(e.getMessage());
+            logger.error("解析客户端提交的消息时出现了格式错误!");
         }
 
 

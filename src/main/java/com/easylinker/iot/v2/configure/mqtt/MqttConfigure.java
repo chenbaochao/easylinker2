@@ -2,6 +2,11 @@ package com.easylinker.iot.v2.configure.mqtt;
 
 import com.easylinker.iot.v2.configure.mqtt.handler.DeviceMessageReceivedHandler;
 import com.easylinker.iot.v2.configure.mqtt.handler.MqttClientWillMessageHandler;
+import com.easylinker.iot.v2.model.device.Device;
+import com.easylinker.iot.v2.repository.DeviceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,18 +20,109 @@ import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 
 /**
  * Created by wwhai on 2017/11/29.
+ * <p>
+ * 上线消息
+ * {
+ * "clientid":"8305132bc868fa613dfa2fa3eac6053a",
+ * "username":"8305132bc868fa613dfa2fa3eac6053a",
+ * "ipaddress":"192.168.3.74",
+ * "clean_sess":true,
+ * "protocol":4,
+ * "connack":0,
+ * "ts":1514995030},
+ * headers={mqtt_retained=false,
+ * mqtt_qos=1,
+ * id=d6f0b5c9-3d2e-f0b7-903b-05eb419fc5be,
+ * mqtt_topic=$SYS/brokers/emq@127.0.0.1/clients/8305132bc868fa613dfa2fa3eac6053a/connected,
+ * mqtt_duplicate=false,
+ * timestamp=1514995030144
+ * }
+ * <p>
+ * 上线消息
+ * {
+ * "clientid":"8305132bc868fa613dfa2fa3eac6053a",
+ * "username":"8305132bc868fa613dfa2fa3eac6053a",
+ * "ipaddress":"192.168.3.74",
+ * "clean_sess":true,
+ * "protocol":4,
+ * "connack":0,
+ * "ts":1514995030},
+ * headers={mqtt_retained=false,
+ * mqtt_qos=1,
+ * id=d6f0b5c9-3d2e-f0b7-903b-05eb419fc5be,
+ * mqtt_topic=$SYS/brokers/emq@127.0.0.1/clients/8305132bc868fa613dfa2fa3eac6053a/connected,
+ * mqtt_duplicate=false,
+ * timestamp=1514995030144
+ * }
+ * <p>
+ * 上线消息
+ * {
+ * "clientid":"8305132bc868fa613dfa2fa3eac6053a",
+ * "username":"8305132bc868fa613dfa2fa3eac6053a",
+ * "ipaddress":"192.168.3.74",
+ * "clean_sess":true,
+ * "protocol":4,
+ * "connack":0,
+ * "ts":1514995030},
+ * headers={mqtt_retained=false,
+ * mqtt_qos=1,
+ * id=d6f0b5c9-3d2e-f0b7-903b-05eb419fc5be,
+ * mqtt_topic=$SYS/brokers/emq@127.0.0.1/clients/8305132bc868fa613dfa2fa3eac6053a/connected,
+ * mqtt_duplicate=false,
+ * timestamp=1514995030144
+ * }
+ */
+/**
+ * 上线消息
+ * {
+ * "clientid":"8305132bc868fa613dfa2fa3eac6053a",
+ * "username":"8305132bc868fa613dfa2fa3eac6053a",
+ * "ipaddress":"192.168.3.74",
+ * "clean_sess":true,
+ * "protocol":4,
+ * "connack":0,
+ * "ts":1514995030},
+ * headers={mqtt_retained=false,
+ * mqtt_qos=1,
+ * id=d6f0b5c9-3d2e-f0b7-903b-05eb419fc5be,
+ * mqtt_topic=$SYS/brokers/emq@127.0.0.1/clients/8305132bc868fa613dfa2fa3eac6053a/connected,
+ * mqtt_duplicate=false,
+ * timestamp=1514995030144
+ * }
+ */
+
+/**
+ * 下线
+ *{
+ * "clientid":"8305132bc868fa613dfa2fa3eac6053a",
+ * "username":"8305132bc868fa613dfa2fa3eac6053a",
+ * "reason":"closed","ts":1514995139
+ * },
+ * headers={
+ * mqtt_retained=false,
+ * mqtt_qos=1,
+ * id=661f362c-92f8-c551-ffb3-3c0afcaee5db,
+ * mqtt_topic=$SYS/brokers/emq@127.0.0.1/clients/8305132bc868fa613dfa2fa3eac6053a/disconnected,
+ * mqtt_duplicate=false,
+ * timestamp=1514995139594
+ * }
+ * ]
+ Device 树莓派4 下线
  */
 @Configuration
 public class MqttConfigure {
+    Logger logger = LoggerFactory.getLogger(MqttConfigure.class);
+
+    @Autowired
+    DeviceRepository deviceRepository;
     /**
      * 默认连接的是本机的EMQ节点 这里为了开发 写死了  后面会把这个HOST地址配置进数据库里面
      */
     @Value("${easylinker.emq.host}")
-    private   String LOCALHOST_EMQ_URL;
-    private   String LOCALHOST_EMQ_USERNAME = "EASY_LINKER";
-    private   String LOCALHOST_EMQ_PASSWORD = "EASY_LINKER";
-    //默认监听所有节点的所有客户端的信息
-    private   String WILL_TOPIC = "$SYS/brokers/+/clients/+/#";
+    String LOCALHOST_EMQ_URL;
+    String LOCALHOST_EMQ_USERNAME = "EASY_LINKER";
+    String LOCALHOST_EMQ_PASSWORD = "EASY_LINKER";
+
 
     /**
      * mqtt 的工厂  用来创建mqtt连接
@@ -40,6 +136,19 @@ public class MqttConfigure {
         /**
          * 后面这里的配置要从数据库里面加载
          */
+        if (deviceRepository.findTopByDeviceName(LOCALHOST_EMQ_USERNAME) == null) {
+            logger.info("创建默认连接账号....");
+            Device device = new Device();
+            device.setOpenId(LOCALHOST_EMQ_USERNAME);
+            device.setClientId(LOCALHOST_EMQ_USERNAME);
+            device.setDeviceName(LOCALHOST_EMQ_USERNAME);
+            device.setDeviceDescribe("EasyLinker监控器");
+            device.setTopic("$SYS/brokers/+/clients/+/#");
+            deviceRepository.save(device);
+            logger.info("创建默认连接账号成功");
+        }
+
+
         factory.setServerURIs(LOCALHOST_EMQ_URL);
         factory.setUserName(LOCALHOST_EMQ_USERNAME);
         factory.setPassword(LOCALHOST_EMQ_PASSWORD);
@@ -56,7 +165,7 @@ public class MqttConfigure {
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(
                 "mqttInbound",
                 mqttClientFactory());
-        adapter.addTopic(WILL_TOPIC);
+        adapter.addTopic("$SYS/brokers/+/clients/+/#");
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
