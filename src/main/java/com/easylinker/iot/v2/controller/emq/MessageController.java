@@ -2,6 +2,7 @@ package com.easylinker.iot.v2.controller.emq;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.easylinker.iot.v2.configure.mqtt.handler.DeviceMessageReceivedHandler;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
 import com.easylinker.iot.v2.emq.EMQApiProvider;
 import com.easylinker.iot.v2.model.device.Device;
@@ -10,6 +11,8 @@ import com.easylinker.iot.v2.repository.DeviceDataRepository;
 import com.easylinker.iot.v2.repository.DeviceRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +29,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/message")
 public class MessageController {
+    Logger logger = LoggerFactory.getLogger(DeviceMessageReceivedHandler.class);
+
     @Autowired
     EMQApiProvider emqApiProvider;
     @Autowired
@@ -63,8 +68,9 @@ public class MessageController {
             jsonObject.put("qos", qos);
             jsonObject.put("retain", retain);
             jsonObject.put("client_id", "http");
-            System.out.println(jsonObject.toJSONString());
             emqApiProvider.publishMessage(jsonObject);
+            logger.info("通过REST API 推送消息:" + jsonObject.toJSONString());
+
         }
         resultJson.put("message", SuccessMessageEnum.OPERATE_SUCCESS);
         resultJson.put("state", 1);

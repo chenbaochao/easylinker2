@@ -56,7 +56,6 @@ public class DeviceMessageReceivedHandler implements MessageHandler {
                 String unit = payloadJson.getString("unit");
                 Boolean retain = payloadJson.getBoolean("retain");
                 String openId = message.getHeaders().get("mqtt_topic").toString().split("/")[2];
-                System.out.println("openId--" + openId);
                 Device device = deviceRepository.findTopByOpenId(openId);
                 if (device != null) {
                     logger.info("openId对应的设备存在");

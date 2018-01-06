@@ -45,9 +45,13 @@ public class Device extends BaseEntity {
     private String ipAddress;
     private Integer allow = 1;
     private Integer access = 3;
-    private String topic = getOpenId();
+    private String topic = "device/+/" + getOpenId();
 
-
+    /**
+     * {"device/publisher/#",
+     * "device/subscriber/#"
+     * }
+     */
     @ManyToOne(targetEntity = DeviceGroup.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private DeviceGroup deviceGroup;
 
