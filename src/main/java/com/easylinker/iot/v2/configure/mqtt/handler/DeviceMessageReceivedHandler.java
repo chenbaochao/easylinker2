@@ -46,29 +46,35 @@ public class DeviceMessageReceivedHandler implements MessageHandler {
     public void handleMessage(Message<?> message) throws MessagingException {
         try {
             System.out.println("来自客户端的消息:" + message);
-
             JSONObject payloadJson = JSONObject.parseObject(message.getPayload().toString());
-            String deviceMessage = payloadJson.getString("message");
-            String unit = payloadJson.getString("unit");
-            Boolean retain = payloadJson.getBoolean("retain");
-            String openId = message.getHeaders().get("mqtt_topic").toString().split("/")[1];
 
-            Device device = deviceRepository.findTopByOpenId(openId);
-            if (device != null) {
-                logger.info("openId对应的设备存在");
-                if (retain) {
-                    logger.info("进行数据持久化");
-                    DeviceData deviceData = new DeviceData();
-                    deviceData.setUnit(unit);
-                    deviceData.setData(deviceMessage);
-                    deviceData.setDevice(device);
-                    deviceDataRepository.save(deviceData);
+            /**
+             * device/publish/{openId} 设备发过来的消息来自这个主题
+             */
+            if (message.getHeaders().get("mqtt_topic").toString().startsWith("device/publisher/")) {
+                String deviceMessage = payloadJson.getString("message");
+                String unit = payloadJson.getString("unit");
+                Boolean retain = payloadJson.getBoolean("retain");
+                String openId = message.getHeaders().get("mqtt_topic").toString().split("/")[2];
+                System.out.println("openId--" + openId);
+                Device device = deviceRepository.findTopByOpenId(openId);
+                if (device != null) {
+                    logger.info("openId对应的设备存在");
+                    if (retain) {
+                        logger.info("进行数据持久化");
+                        DeviceData deviceData = new DeviceData();
+                        deviceData.setUnit(unit);
+                        deviceData.setData(deviceMessage);
+                        deviceData.setDevice(device);
+                        deviceDataRepository.save(deviceData);
+                    } else {
+                        logger.info("不进行数据持久化");
+                    }
                 } else {
-                    logger.info("不进行数据持久化");
+                    logger.info("openId对应的设备不存在");
                 }
-            } else {
-                logger.info("openId对应的设备不存在");
             }
+
 
         } catch (Exception e) {
             logger.info("消息格式解析出错!" + e.getMessage());

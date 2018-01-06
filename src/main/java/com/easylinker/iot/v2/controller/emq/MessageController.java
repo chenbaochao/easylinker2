@@ -55,14 +55,15 @@ public class MessageController {
         String message = pushBody.getString("message");
         Integer qos = pushBody.getInteger("qos");
         Boolean retain = pushBody.getBoolean("retain");
+
         for (Object id : deviceIdArray) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("topic", id.toString());
+            jsonObject.put("topic", "device/subscriber/" + id.toString());
             jsonObject.put("payload", message);
             jsonObject.put("qos", qos);
             jsonObject.put("retain", retain);
             jsonObject.put("client_id", "http");
-
+            System.out.println(jsonObject.toJSONString());
             emqApiProvider.publishMessage(jsonObject);
         }
         resultJson.put("message", SuccessMessageEnum.OPERATE_SUCCESS);

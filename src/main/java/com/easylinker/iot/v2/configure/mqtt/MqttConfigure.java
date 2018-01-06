@@ -71,6 +71,23 @@ import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
  * mqtt_duplicate=false,
  * timestamp=1514995030144
  * }
+ * <p>
+ * 上线消息
+ * {
+ * "clientid":"8305132bc868fa613dfa2fa3eac6053a",
+ * "username":"8305132bc868fa613dfa2fa3eac6053a",
+ * "ipaddress":"192.168.3.74",
+ * "clean_sess":true,
+ * "protocol":4,
+ * "connack":0,
+ * "ts":1514995030},
+ * headers={mqtt_retained=false,
+ * mqtt_qos=1,
+ * id=d6f0b5c9-3d2e-f0b7-903b-05eb419fc5be,
+ * mqtt_topic=$SYS/brokers/emq@127.0.0.1/clients/8305132bc868fa613dfa2fa3eac6053a/connected,
+ * mqtt_duplicate=false,
+ * timestamp=1514995030144
+ * }
  */
 /**
  * 上线消息
@@ -199,7 +216,7 @@ public class MqttConfigure {
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(
                 "mqttMessageInBound",
                 mqttClientFactory());
-        adapter.addTopic("device/#");//监控设备消息
+        adapter.addTopic("device/publisher/#");//监控设备publish的消息
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
