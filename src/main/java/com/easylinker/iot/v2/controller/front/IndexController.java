@@ -23,7 +23,7 @@ public class IndexController {
     public void index(HttpServletResponse httpServletResponse) throws Exception {
         httpServletResponse.setCharacterEncoding("utf-8");
         httpServletResponse.setContentType("text/html");
-        httpServletResponse.getWriter().write("<h1>运行成功</h1><a href=\"http://ww.easylinker.xyz\">[社区-文档]</a>");
+        httpServletResponse.getWriter().write("<h1>运行成功</h1><a href=\"http://www.easylinker.xyz\">[社区-文档]</a>");
         httpServletResponse.getWriter().flush();
 
     }
