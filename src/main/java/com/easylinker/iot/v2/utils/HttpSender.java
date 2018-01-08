@@ -72,4 +72,22 @@ public class HttpSender {
 
     }
 
+    public static void main(String[] args) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("loginParam", "wwhai");
+            jsonObject.put("password", "wwhai");
+
+        } catch (Exception e) {
+
+        }
+        JSONObject result = sendHttpPostRequestBody("http://47.94.173.41:1314/userLogin", jsonObject);
+        System.out.println("--:" + result.toString());
+        if ((Integer.parseInt(result.get("state").toString())) == 1) {
+            System.out.println("登录成功!");
+        } else {
+            System.out.println("失败!");
+        }
+
+    }
 }
