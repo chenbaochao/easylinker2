@@ -1,5 +1,6 @@
 package com.easylinker.iot.v2.model.device;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.easylinker.iot.v2.model.base.BaseEntity;
 import com.easylinker.iot.v2.model.user.AppUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,10 +23,14 @@ public class DeviceGroup extends BaseEntity {
     private Long serialNumber = System.currentTimeMillis();
 
     @JsonIgnore
+    @JSONField(serialize = false)
+
     @OneToMany(targetEntity = Device.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Device> deviceList;
 
     @JsonIgnore
+    @JSONField(serialize = false)
+
     @ManyToOne(targetEntity = AppUser.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private AppUser appUser;
 

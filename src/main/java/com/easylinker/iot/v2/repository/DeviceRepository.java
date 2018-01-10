@@ -20,5 +20,8 @@ public interface DeviceRepository extends JpaRepository<Device, String> {
 
     List<Device> findAllByDeviceGroup(DeviceGroup deviceGroup);
 
+    Device findTopByDeviceCode(String deviceCode);
+
+
 
 }

@@ -1,7 +1,11 @@
 package com.easylinker.iot.v2.model.device;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.easylinker.iot.v2.model.base.BaseEntity;
+import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.utils.MD5Generator;
+import com.easylinker.iot.v2.utils.RandomStringGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -46,6 +50,15 @@ public class Device extends BaseEntity {
     private Integer allow = 1;
     private Integer access = 3;
 
+    @JsonIgnore
+    @JSONField(serialize = false)
+    @ManyToOne(targetEntity = AppUser.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private AppUser appUser;
+
+    /**
+     * 刻在商品二维码上的识别码，用来绑定设备
+     */
+    private String deviceCode = RandomStringGenerator.getRandomString(10);
 
     /**
      * {"device/publisher/#",
@@ -62,6 +75,8 @@ public class Device extends BaseEntity {
      * 4 Python
      * 5 Ardiuno
      */
+
+
     @Enumerated(EnumType.STRING)
     private SdkType SdkType = com.easylinker.iot.v2.model.device.SdkType.PYTHON;
 
@@ -164,5 +179,21 @@ public class Device extends BaseEntity {
 
     public void setDeviceDescribe(String deviceDescribe) {
         this.deviceDescribe = deviceDescribe;
+    }
+
+    public String getDeviceCode() {
+        return deviceCode;
+    }
+
+    public void setDeviceCode(String deviceCode) {
+        this.deviceCode = deviceCode;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
 }

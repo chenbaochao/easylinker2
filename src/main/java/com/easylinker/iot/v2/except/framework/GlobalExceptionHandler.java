@@ -1,7 +1,6 @@
 package com.easylinker.iot.v2.except.framework;
 
 import com.alibaba.fastjson.JSONObject;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -37,19 +36,17 @@ public class GlobalExceptionHandler {
             resultJson.put("message", "Error code 500! HTTP Method not support，please check out your http request method!");
         } else if (e instanceof NullPointerException) {
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 500! Required params not present!" + e.getMessage());
+            resultJson.put("message", "Error code 5001! Required params not present!");
 
         } else if (e instanceof HttpMessageNotReadableException) {
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 500! HttpMessageNotReadable!" + e.getMessage());
+            resultJson.put("message", "Error code 5002! HttpMessageNotReadable!");
         } else {
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 500!" + e.getMessage());
+            resultJson.put("message", "Error code 5003!");
         }
         return resultJson;
     }
-
-
 
 
 }

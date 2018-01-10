@@ -166,32 +166,7 @@ public class UserController {
         return resultJson;
     }
 
-    /**
-     * 查找把一个用户
-     *
-     * @param userId
-     * @return
-     */
 
-    @ApiOperation(value = "查找一个用户", notes = "查询一个用户", httpMethod = "GET")
-    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
-    public JSONObject findUser(@PathVariable String userId) {
-        JSONObject resultJson = new JSONObject();
-        if (userId != null) {
-            AppUser appUser = appUserRepository.findOne(userId);
-            if (appUser != null) {
-                resultJson.put("state", 1);
-                resultJson.put("data", appUser);
-                resultJson.put("message", SuccessMessageEnum.OPERATE_SUCCESS);
-            }
-        } else {
-            resultJson.put("state", 0);
-            resultJson.put("message", FailureMessageEnum.OPERATE_FAILED);
-        }
-
-
-        return resultJson;
-    }
 
 
 }
