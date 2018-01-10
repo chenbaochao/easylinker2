@@ -45,15 +45,37 @@ public class Device extends BaseEntity {
     private String ipAddress;
     private Integer allow = 1;
     private Integer access = 3;
-    private String topic = "device/+/" + getOpenId();
+
 
     /**
      * {"device/publisher/#",
      * "device/subscriber/#"
      * }
      */
+    private String topic = "device/+/" + getOpenId();
+
+    /**
+     * SDK 种类 默认是Python
+     * 1 C++
+     * 2 C
+     * 3 Java
+     * 4 Python
+     * 5 Ardiuno
+     */
+    @Enumerated(EnumType.STRING)
+    private SdkType SdkType = com.easylinker.iot.v2.model.device.SdkType.PYTHON;
+
+
     @ManyToOne(targetEntity = DeviceGroup.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private DeviceGroup deviceGroup;
+
+    public com.easylinker.iot.v2.model.device.SdkType getSdkType() {
+        return SdkType;
+    }
+
+    public void setSdkType(com.easylinker.iot.v2.model.device.SdkType sdkType) {
+        SdkType = sdkType;
+    }
 
     public boolean isOnline() {
         return isOnline;

@@ -9,6 +9,7 @@ import com.easylinker.iot.v2.repository.AppUserRepository;
 import com.easylinker.iot.v2.repository.DeviceGroupRepository;
 import com.easylinker.iot.v2.repository.DeviceRepository;
 import com.easylinker.iot.v2.utils.EmailSender;
+import com.easylinker.iot.v2.utils.ReturnResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,7 @@ public class UserController {
     @ApiOperation(nickname = "测试登录", value = "测试登录", notes = "测试登录", httpMethod = "POST")
     @RequestMapping(value = "/testLogin", method = RequestMethod.POST)
     public JSONObject testUserLogin() {
-        JSONObject resultJson = new JSONObject();
-        resultJson.put("message", "这个仅仅是用来测试登录的，系统的登录地址是:/userLogin");
-        resultJson.put("data", "登录地址:/userLogin,参数:loginParam,password");
-        resultJson.put("state", 1);
-        return resultJson;
+        return ReturnResult.returnResultWithData(1, "这个仅仅是用来测试登录的，系统的登录地址是:/userLogin", "登录地址:/userLogin,参数:loginParam,password");
     }
 
     /**
@@ -94,7 +91,7 @@ public class UserController {
                     appUser.setEmail(email);
 
                     DeviceGroup deviceGroup = new DeviceGroup();
-                    deviceGroup.setName("默认组");
+                    deviceGroup.setName("DEFAULT_GROUP");
                     deviceGroup.setAppUser(appUser);
 
                     try {

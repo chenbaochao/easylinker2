@@ -48,12 +48,15 @@ public class DeviceOperateController {
                 String deviceDescribe = deviceParamMap.get("deviceDescribe");
                 Long groupSerialNumber = Long.parseLong(deviceParamMap.get("groupSerialNumber"));
                 DeviceGroup deviceGroup = deviceGroupRepository.findTopBySerialNumber(groupSerialNumber);
-                if (deviceGroup != null) {//判断是否存在分组
-
-                    if (deviceRepository.findTopByDeviceName(deviceName) != null) {//判读是否存在
+                //判断是否存在分组
+                if (deviceGroup != null) {
+                    //设备是否存在,默认是不允许创建名字相同的设备的
+                    if (deviceRepository.findTopByDeviceName(deviceName) != null) {
+                        //出现名字已经存在的情况
                         resultJson.put("state", 0);
                         resultJson.put("message", FailureMessageEnum.DEVICE_EXIST);
                     } else {
+                        //创建新设备  挂在指定的分组中
                         Device device = new Device();
                         device.setDeviceName(deviceName);
                         device.setDeviceDescribe(deviceDescribe);
@@ -66,14 +69,27 @@ public class DeviceOperateController {
 
                     }
 
-                } else {//分组不存在
+                } else if (groupSerialNumber == null) {
+                    //没有提供分组序列号 就分配进默认分组
+                    DeviceGroup defaultGroup = deviceGroupRepository.findTopByName("DEFAULT_GROUP");
+                    Device device = new Device();
+                    device.setDeviceName(deviceName);
+                    device.setDeviceDescribe(deviceDescribe);
+                    device.setDeviceGroup(defaultGroup);
+                    device.setQrCode(QRCodeGenerator.generateQRCode(device.getId()));
+                    deviceRepository.save(device);
+                    resultJson.put("state", 1);
+                    resultJson.put("data", device);
+                    resultJson.put("message", SuccessMessageEnum.DEVICE_ADD_SUCCESS);
+                } else {
+                    //查不出设备分组
                     resultJson.put("state", 0);
                     resultJson.put("message", FailureMessageEnum.DEVICE_GROUP_NOT_EXIST);
                 }
 
 
             } catch (Exception e) {
-                e.printStackTrace();
+                //参数船体不全的情况
                 resultJson.put("state", 0);
                 resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
 
