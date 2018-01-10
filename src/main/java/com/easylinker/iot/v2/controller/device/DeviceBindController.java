@@ -32,7 +32,7 @@ public class DeviceBindController {
     /**
      * 绑定设备
      */
-    @ApiOperation(value = "增加一个设备", notes = "增加一个设备", httpMethod = "POST")
+    @ApiOperation(value = "绑定设备", notes = "绑定设备", httpMethod = "POST")
     @RequestMapping(value = "/device/bind")
     public JSONObject bindDevice(@RequestBody JSONObject body) {
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

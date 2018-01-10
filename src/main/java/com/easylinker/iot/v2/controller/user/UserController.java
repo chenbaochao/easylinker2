@@ -7,14 +7,15 @@ import com.easylinker.iot.v2.model.device.DeviceGroup;
 import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.repository.AppUserRepository;
 import com.easylinker.iot.v2.repository.DeviceGroupRepository;
-import com.easylinker.iot.v2.repository.DeviceRepository;
-import com.easylinker.iot.v2.utils.EmailSender;
 import com.easylinker.iot.v2.utils.MD5Generator;
 import com.easylinker.iot.v2.utils.ReturnResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
 import java.util.Map;
@@ -32,21 +33,16 @@ public class UserController {
     String phone;
     @Autowired
     AppUserRepository appUserRepository;
-    @Autowired
-    DeviceRepository deviceRepository;
 
 
     @Autowired
     DeviceGroupRepository deviceGroupRepository;
 
-    @Autowired
-    EmailSender emailSender;
-
 
     @ApiOperation(nickname = "测试登录", value = "测试登录", notes = "测试登录", httpMethod = "POST")
     @RequestMapping(value = "/testLogin", method = RequestMethod.POST)
     public JSONObject testUserLogin() {
-        return ReturnResult.returnResultWithData(1, "这个仅仅是用来测试登录的，系统的登录地址是:/userLogin", "登录地址:/userLogin,参数:loginParam,password");
+        return ReturnResult.returnResultWithData(1, "这个仅仅是用来测试登录的，系统的登录地址是:/userLogin", AppUser.class);
     }
 
     /**
@@ -165,8 +161,6 @@ public class UserController {
 
         return resultJson;
     }
-
-
 
 
 }
