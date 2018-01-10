@@ -30,7 +30,7 @@ public class DeviceBindController {
     AppUserRepository appUserRepository;
 
     /**
-     *
+     * 绑定设备
      */
     @ApiOperation(value = "增加一个设备", notes = "增加一个设备", httpMethod = "POST")
     @RequestMapping(value = "/device/bind")
@@ -47,6 +47,7 @@ public class DeviceBindController {
             deviceList.add(device);
             if (appUserRepository.findTopByDeviceList(deviceList) != null) {
                 device.setAppUser(appUser);
+                deviceRepository.save(device);
                 return ReturnResult.returnResult(1, "设备绑定成功!");
             } else {
                 return ReturnResult.returnResult(0, "设备已经绑定到其他账户!");
@@ -55,7 +56,24 @@ public class DeviceBindController {
         } else {
             return ReturnResult.returnResult(0, "设备不存在!");
         }
+    }
 
 
+    /**
+     * 解除设备
+     */
+    @ApiOperation(value = "解除设备", notes = "解除设备", httpMethod = "POST")
+    @RequestMapping(value = "/device/bind")
+    public JSONObject unBindDevice(@RequestBody JSONObject body) {
+        String deviceCode = body.getString("deviceCode");
+        Device device = deviceRepository.findTopByDeviceCode(deviceCode);
+        if (device != null) {
+            device.setAppUser(null);
+            deviceRepository.save(device);
+            return ReturnResult.returnResult(1, "解除绑定成功!");
+
+        } else {
+            return ReturnResult.returnResult(0, "设备不存在!");
+        }
     }
 }
