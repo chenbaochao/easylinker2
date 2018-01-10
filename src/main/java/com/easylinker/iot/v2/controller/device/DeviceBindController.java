@@ -63,7 +63,7 @@ public class DeviceBindController {
      * 解除设备
      */
     @ApiOperation(value = "解除设备", notes = "解除设备", httpMethod = "POST")
-    @RequestMapping(value = "/device/bind")
+    @RequestMapping(value = "/device/unBind")
     public JSONObject unBindDevice(@RequestBody JSONObject body) {
         String deviceCode = body.getString("deviceCode");
         Device device = deviceRepository.findTopByDeviceCode(deviceCode);
