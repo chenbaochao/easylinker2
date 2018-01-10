@@ -189,11 +189,11 @@ public class Device extends BaseEntity {
         this.deviceCode = deviceCode;
     }
 
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
+//    public AppUser getAppUser() {
+//        return appUser;
+//    }
+//
+//    public void setAppUser(AppUser appUser) {
+//        this.appUser = appUser;
+//    }
 }

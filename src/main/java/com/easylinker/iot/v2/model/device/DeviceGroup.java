@@ -22,8 +22,8 @@ public class DeviceGroup extends BaseEntity {
     private String name;
     private Long serialNumber = System.currentTimeMillis();
 
-    @JsonIgnore
-    @JSONField(serialize = false)
+//    @JsonIgnore
+//    @JSONField(serialize = false)
 
     @OneToMany(targetEntity = Device.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Device> deviceList;

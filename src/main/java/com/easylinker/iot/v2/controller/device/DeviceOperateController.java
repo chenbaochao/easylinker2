@@ -37,16 +37,16 @@ public class DeviceOperateController {
      */
     @ApiOperation(value = "增加一个设备", notes = "增加一个设备", httpMethod = "POST")
     @RequestMapping(value = "/user/device", method = RequestMethod.POST)
-    public JSONObject addDevice(@RequestBody Map<String, String> deviceParamMap) {
+    public JSONObject addDevice(@RequestBody JSONObject deviceParamMap) {
         JSONObject resultJson = new JSONObject();
         if (deviceParamMap == null) {
             resultJson.put("state", 0);
             resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
         } else {
             try {
-                String deviceName = deviceParamMap.get("deviceName");
-                String deviceDescribe = deviceParamMap.get("deviceDescribe");
-                Long groupSerialNumber = Long.parseLong(deviceParamMap.get("groupSerialNumber"));
+                String deviceName = deviceParamMap.getString("deviceName");
+                String deviceDescribe = deviceParamMap.getString("deviceDescribe");
+                Long groupSerialNumber = deviceParamMap.getLong("groupSerialNumber");
                 DeviceGroup deviceGroup = deviceGroupRepository.findTopBySerialNumber(groupSerialNumber);
                 //判断是否存在分组
                 if (deviceGroup != null) {
@@ -89,6 +89,7 @@ public class DeviceOperateController {
 
 
             } catch (Exception e) {
+                e.printStackTrace();
                 //参数船体不全的情况
                 resultJson.put("state", 0);
                 resultJson.put("message", FailureMessageEnum.INVALID_PARAM);

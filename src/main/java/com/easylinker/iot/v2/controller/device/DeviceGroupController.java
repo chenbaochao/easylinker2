@@ -1,4 +1,4 @@
-package com.easylinker.iot.v2.controller.user;
+package com.easylinker.iot.v2.controller.device;
 
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.FailureMessageEnum;
