@@ -92,6 +92,9 @@ public class UserController {
                     deviceGroup.setAppUser(appUser);
 
                     try {
+                        /**
+                         * 这里先不写  因为QQ邮箱出问题了
+                         */
                         //sendEmail(email);//发送邮件
                         //emailSender.sendEmail(email);
                     } catch (Exception e) {
