@@ -5,10 +5,7 @@ import com.easylinker.iot.v2.repository.AppUserRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by wwhai on 2017/11/15.
@@ -23,7 +20,7 @@ public class AdminController {
 
     @ApiOperation(value = "删除一个用户", notes = "删除一个用户", httpMethod = "DELETE")
     @RequestMapping(value = "/user", method = RequestMethod.DELETE)
-    public JSONObject deleteUser() {
+    public JSONObject deleteUser(@RequestBody JSONObject body) {
         JSONObject resultJson = new JSONObject();
 
         return resultJson;
@@ -33,6 +30,7 @@ public class AdminController {
     @RequestMapping(value = "/users/{pageNumber}/{pageSize}", method = RequestMethod.GET)
     public JSONObject users(@PathVariable Integer pageNumber, @PathVariable Integer pageSize) {
         JSONObject resultJson = new JSONObject();
+
 
 
         return resultJson;

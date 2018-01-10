@@ -9,6 +9,7 @@ import com.easylinker.iot.v2.repository.AppUserRepository;
 import com.easylinker.iot.v2.repository.DeviceGroupRepository;
 import com.easylinker.iot.v2.repository.DeviceRepository;
 import com.easylinker.iot.v2.utils.EmailSender;
+import com.easylinker.iot.v2.utils.MD5Generator;
 import com.easylinker.iot.v2.utils.ReturnResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -86,7 +87,7 @@ public class UserController {
                 } else {
                     AppUser appUser = new AppUser();
                     appUser.setUsername(username);
-                    appUser.setPassword(password);
+                    appUser.setPassword(MD5Generator.EncodingMD5(password));
                     appUser.setPhone(phone);
                     appUser.setEmail(email);
 
@@ -96,7 +97,7 @@ public class UserController {
 
                     try {
                         //sendEmail(email);//发送邮件
-                        emailSender.sendEmail(email);
+                        //emailSender.sendEmail(email);
                     } catch (Exception e) {
                         resultJson.put("state", 0);
                         resultJson.put("message", "系统内部错误!");
