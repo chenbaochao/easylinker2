@@ -5,12 +5,15 @@ import com.easylinker.iot.v2.constants.FailureMessageEnum;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
 import com.easylinker.iot.v2.model.device.Device;
 import com.easylinker.iot.v2.model.device.DeviceGroup;
+import com.easylinker.iot.v2.model.user.AppUser;
+import com.easylinker.iot.v2.repository.AppUserRepository;
 import com.easylinker.iot.v2.repository.DeviceGroupRepository;
 import com.easylinker.iot.v2.repository.DeviceRepository;
 import com.easylinker.iot.v2.utils.QRCodeGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -27,26 +30,31 @@ public class DeviceOperateController {
     @Autowired
     DeviceGroupRepository deviceGroupRepository;
 
+    @Autowired
+    AppUserRepository appUserRepository;
 
     /**
      * 设备操作相关
      * 增加设备
      *
-     * @param deviceParamMap
+     * @param body
      * @return
      */
     @ApiOperation(value = "增加一个设备", notes = "增加一个设备", httpMethod = "POST")
     @RequestMapping(value = "/user/device", method = RequestMethod.POST)
-    public JSONObject addDevice(@RequestBody JSONObject deviceParamMap) {
+    public JSONObject addDevice(@RequestBody JSONObject body) {
+        AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        AppUser pUser = appUserRepository.findOne(appUser.getId());
         JSONObject resultJson = new JSONObject();
-        if (deviceParamMap == null) {
+        if (body == null) {
             resultJson.put("state", 0);
             resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
         } else {
             try {
-                String deviceName = deviceParamMap.getString("deviceName");
-                String deviceDescribe = deviceParamMap.getString("deviceDescribe");
-                Long groupSerialNumber = deviceParamMap.getLong("groupSerialNumber");
+                String deviceName = body.getString("deviceName");
+                String deviceDescribe = body.getString("deviceDescribe");
+                Long groupSerialNumber = body.getLong("groupSerialNumber");
                 DeviceGroup deviceGroup = deviceGroupRepository.findTopBySerialNumber(groupSerialNumber);
                 //判断是否存在分组
                 if (deviceGroup != null) {
@@ -61,6 +69,7 @@ public class DeviceOperateController {
                         device.setDeviceName(deviceName);
                         device.setDeviceDescribe(deviceDescribe);
                         device.setDeviceGroup(deviceGroup);
+                        device.setAppUser(pUser);
                         device.setQrCode(QRCodeGenerator.generateQRCode(device.getId()));
                         deviceRepository.save(device);
                         resultJson.put("state", 1);
@@ -71,11 +80,12 @@ public class DeviceOperateController {
 
                 } else if (groupSerialNumber == null) {
                     //没有提供分组序列号 就分配进默认分组
-                    DeviceGroup defaultGroup = deviceGroupRepository.findTopByName("DEFAULT_GROUP");
+                    DeviceGroup defaultGroup = deviceGroupRepository.findTopByAppUserAndName(appUser, "DEFAULT_GROUP");
                     Device device = new Device();
                     device.setDeviceName(deviceName);
                     device.setDeviceDescribe(deviceDescribe);
                     device.setDeviceGroup(defaultGroup);
+                    device.setAppUser(appUser);
                     device.setQrCode(QRCodeGenerator.generateQRCode(device.getId()));
                     deviceRepository.save(device);
                     resultJson.put("state", 1);
@@ -89,8 +99,8 @@ public class DeviceOperateController {
 
 
             } catch (Exception e) {
+                //参数不全的情况
                 e.printStackTrace();
-                //参数船体不全的情况
                 resultJson.put("state", 0);
                 resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
 

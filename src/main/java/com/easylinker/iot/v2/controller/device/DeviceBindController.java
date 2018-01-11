@@ -35,6 +35,9 @@ public class DeviceBindController {
     @ApiOperation(value = "绑定设备", notes = "绑定设备", httpMethod = "POST")
     @RequestMapping(value = "/device/bind")
     public JSONObject bindDevice(@RequestBody JSONObject body) {
+        /**
+         * 绑定设备的时候需要提供设备的分许
+         */
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String deviceCode = body.getString("deviceCode");
         Device device = deviceRepository.findTopByDeviceCode(deviceCode);
@@ -65,6 +68,7 @@ public class DeviceBindController {
     @ApiOperation(value = "解除设备", notes = "解除设备", httpMethod = "POST")
     @RequestMapping(value = "/device/unBind")
     public JSONObject unBindDevice(@RequestBody JSONObject body) {
+
         String deviceCode = body.getString("deviceCode");
         Device device = deviceRepository.findTopByDeviceCode(deviceCode);
         if (device != null) {

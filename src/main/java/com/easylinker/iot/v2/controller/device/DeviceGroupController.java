@@ -8,9 +8,11 @@ import com.easylinker.iot.v2.model.device.DeviceGroup;
 import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.repository.DeviceGroupRepository;
 import com.easylinker.iot.v2.repository.DeviceRepository;
+import com.easylinker.iot.v2.utils.ReturnResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,7 @@ import java.util.Map;
 /**
  * Created by wwhai on 2017/12/15.
  */
-@Api(value = "设备组管理", description = "用户的设备组管理",tags = "设备组操作")
+@Api(value = "设备组管理", description = "用户的设备组管理", tags = "设备组操作")
 @RestController
 
 public class DeviceGroupController {
@@ -39,6 +41,7 @@ public class DeviceGroupController {
     @ApiOperation(value = "增加分组", notes = "增加分组", httpMethod = "POST")
     @RequestMapping(value = "/user/device/group", method = RequestMethod.POST)
     public JSONObject addGroup(@RequestBody Map<String, String> groupNameParamMap) throws Exception {
+        AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         JSONObject resultJson = new JSONObject();
         try {
             String groupName = groupNameParamMap.get("groupName");
@@ -57,6 +60,7 @@ public class DeviceGroupController {
                 } else {
                     DeviceGroup deviceGroup = new DeviceGroup();
                     deviceGroup.setName(groupName);
+                    deviceGroup.setAppUser(appUser);
                     deviceGroupRepository.save(deviceGroup);
                     resultJson.put("state", 1);
                     resultJson.put("data", deviceGroup);
@@ -189,5 +193,17 @@ public class DeviceGroupController {
 
         return resultJson;
 
+    }
+
+
+    @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "GET")
+    @RequestMapping(value = "/user/device/devices/allDevice/{pageNumber}/{pageSize}", method = RequestMethod.GET)
+    public JSONObject devices(@PathVariable Integer pageNumber, @PathVariable Integer pageSize) {
+
+        AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return ReturnResult.returnResultWithData(
+                1, "查询成功",
+                deviceRepository.findAllByAppUser(new PageRequest(pageNumber, pageSize), appUser));
     }
 }

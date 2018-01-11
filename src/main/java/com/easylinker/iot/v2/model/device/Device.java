@@ -1,11 +1,11 @@
 package com.easylinker.iot.v2.model.device;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.easylinker.iot.v2.model.base.BaseEntity;
 import com.easylinker.iot.v2.model.user.AppUser;
 import com.easylinker.iot.v2.utils.MD5Generator;
 import com.easylinker.iot.v2.utils.RandomStringGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -51,8 +51,15 @@ public class Device extends BaseEntity {
     private Integer access = 3;
 
     @JsonIgnore
-    @JSONField(serialize = false)
-    @ManyToOne(targetEntity = AppUser.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //@JSONField(serialize = false)
+    /**
+     * 我曹  这里真的是坑  要不是StackOverFlow  我特么要死在这里
+     * JPA  里面的 ManyToOne 里面的级联不要用！！！！！
+     * 用 Hibernate的
+     */
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @ManyToOne(targetEntity = AppUser.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "app_user")
     private AppUser appUser;
 
     /**
@@ -76,21 +83,14 @@ public class Device extends BaseEntity {
      * 5 Ardiuno
      */
 
-
-    @Enumerated(EnumType.STRING)
-    private SdkType SdkType = com.easylinker.iot.v2.model.device.SdkType.PYTHON;
+//
+//    @Enumerated(EnumType.STRING)
+//    private SdkType SdkType = com.easylinker.iot.v2.model.device.SdkType.PYTHON;
 
 
     @ManyToOne(targetEntity = DeviceGroup.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private DeviceGroup deviceGroup;
 
-    public com.easylinker.iot.v2.model.device.SdkType getSdkType() {
-        return SdkType;
-    }
-
-    public void setSdkType(com.easylinker.iot.v2.model.device.SdkType sdkType) {
-        SdkType = sdkType;
-    }
 
     public boolean isOnline() {
         return isOnline;
@@ -189,11 +189,11 @@ public class Device extends BaseEntity {
         this.deviceCode = deviceCode;
     }
 
-//    public AppUser getAppUser() {
-//        return appUser;
-//    }
-//
-//    public void setAppUser(AppUser appUser) {
-//        this.appUser = appUser;
-//    }
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
 }

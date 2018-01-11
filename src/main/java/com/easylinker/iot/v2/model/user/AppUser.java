@@ -5,6 +5,7 @@ import com.easylinker.iot.v2.model.base.BaseEntity;
 import com.easylinker.iot.v2.model.device.Device;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,6 +38,12 @@ public class AppUser extends BaseEntity implements UserDetails {
 
     @JsonIgnore
     @JSONField(serialize = false)
+    /**
+     * 不要用JPA的级联 ！！！！！！！！！！！！！！！！！！！！！
+     * 用Hibernate的注解
+     *
+     */
+    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
     @OneToMany(targetEntity = Device.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Device> deviceList = new ArrayList<>();
     /**

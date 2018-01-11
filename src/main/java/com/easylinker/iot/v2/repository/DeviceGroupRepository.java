@@ -14,5 +14,7 @@ public interface DeviceGroupRepository extends JpaRepository<DeviceGroup, String
 
     DeviceGroup findTopByName(String name);
 
+    DeviceGroup findTopByAppUserAndName(AppUser appUser, String name);
+
     List<DeviceGroup> findAllByAppUser(AppUser appUser);
 }

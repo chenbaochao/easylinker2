@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.easylinker.iot.v2.model.base.BaseEntity;
 import com.easylinker.iot.v2.model.user.AppUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,10 +29,14 @@ public class DeviceGroup extends BaseEntity {
     @OneToMany(targetEntity = Device.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Device> deviceList;
 
+
+    /**
+     * 神坑1  级联操作
+     */
     @JsonIgnore
     @JSONField(serialize = false)
-
-    @ManyToOne(targetEntity = AppUser.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @ManyToOne(targetEntity = AppUser.class, cascade = CascadeType.ALL)
     private AppUser appUser;
 
     public AppUser getAppUser() {
@@ -42,6 +47,8 @@ public class DeviceGroup extends BaseEntity {
         this.appUser = appUser;
     }
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     public List<Device> getDeviceList() {
         return deviceList;
     }
