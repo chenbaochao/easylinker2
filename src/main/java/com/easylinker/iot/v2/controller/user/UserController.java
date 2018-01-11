@@ -91,17 +91,17 @@ public class UserController {
                     deviceGroup.setName("DEFAULT_GROUP");
                     deviceGroup.setAppUser(appUser);
 
-                    try {
-                        /**
-                         * 这里先不写  因为QQ邮箱出问题了
-                         */
-                        //sendEmail(email);//发送邮件
-                        //emailSender.sendEmail(email);
-                    } catch (Exception e) {
-                        resultJson.put("state", 0);
-                        resultJson.put("message", "系统内部错误!");
-                        return resultJson;
-                    }
+//                    try {
+//                        /**
+//                         * 这里先不写  因为QQ邮箱出问题了
+//                         */
+//                        //sendEmail(email);//发送邮件
+//                        //emailSender.sendEmail(email);
+//                    } catch (Exception e) {
+//                        resultJson.put("state", 0);
+//                        resultJson.put("message", "系统内部错误!");
+//                        return resultJson;
+//                    }
                     appUserRepository.save(appUser);
                     deviceGroupRepository.save(deviceGroup);
                     resultJson.put("state", 1);
