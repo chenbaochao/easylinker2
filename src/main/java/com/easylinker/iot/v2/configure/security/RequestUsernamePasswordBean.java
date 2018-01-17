@@ -1,6 +1,8 @@
 package com.easylinker.iot.v2.configure.security;
 
 import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -11,6 +13,7 @@ import java.io.InputStreamReader;
  * 默认包含了  用户名  密码  验证码
  */
 public class RequestUsernamePasswordBean {
+    private static final Logger logger = LoggerFactory.getLogger(RequestUsernamePasswordBean.class);
     public static final String USERNAME_PARAM = "loginParam";
     public static final String PASSWORD_PARAM = "password";
 
@@ -58,12 +61,12 @@ public class RequestUsernamePasswordBean {
                 this.setPassword(password);
 
             } else {
-                System.err.println("Only POST method can be support REST!");
+                logger.info("Only POST method can be support REST!");
 
             }
 
         } catch (Exception e) {
-            System.err.println("RequestBean param error!");
+            logger.info("RequestBean param error!");
         }
 
     }
