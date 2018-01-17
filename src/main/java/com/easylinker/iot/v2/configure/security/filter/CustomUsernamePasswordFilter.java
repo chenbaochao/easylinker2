@@ -58,7 +58,7 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
                 logger.error("登录失败");
                 JSONObject resultJson = new JSONObject();
                 resultJson.put("state", 0);
-                resultJson.put("message", "登录失败!");
+                resultJson.put("message", "登录失败!失败信息:" + e.getMessage());
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
 
