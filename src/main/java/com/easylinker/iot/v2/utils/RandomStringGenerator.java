@@ -22,7 +22,7 @@ public class RandomStringGenerator {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(getRandomString(10));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(getRandomString(10));
+//    }
 }
