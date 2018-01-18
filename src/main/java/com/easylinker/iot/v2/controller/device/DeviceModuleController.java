@@ -65,7 +65,5 @@ public class DeviceModuleController {
                 return ReturnResult.returnResult(1, moduleTag.toString());
 
         }
-
-
     }
 }
