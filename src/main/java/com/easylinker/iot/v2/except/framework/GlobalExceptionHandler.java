@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
             resultJson.put("message", "Error code 5002! HttpMessageNotReadable!");
         } else {
             resultJson.put("state", 0);
-            resultJson.put("message", "Error code 5003!");
+            resultJson.put("message", "Error code 5003!" + e.getMessage());
         }
         return resultJson;
     }

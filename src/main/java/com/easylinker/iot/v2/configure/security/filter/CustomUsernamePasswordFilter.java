@@ -46,7 +46,7 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
         Authentication authentication = null;
 
         if (true && !request.getMethod().equals("POST")) {
-            throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
+            throw new AuthenticationServiceException("AuthenticSation method not supported: " + request.getMethod());
         } else {
 
             try {
@@ -55,7 +55,7 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
                 authentication = getAuthenticationManager().authenticate(authRequest);
 
             } catch (Exception e) {
-                logger.error("登录失败");
+                logger.error("登录失败"+e.getMessage());
                 JSONObject resultJson = new JSONObject();
                 resultJson.put("state", 0);
                 resultJson.put("message", "登录失败!失败信息:" + e.getMessage());

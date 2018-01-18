@@ -159,17 +159,19 @@ public class DeviceGroupController {
      */
     @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "GET")
     @RequestMapping(value = "/user/device/devices/{serialNumber}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
-    public JSONObject devices(@PathVariable String serialNumber, @PathVariable Integer pageNumber, @PathVariable Integer pageSize) {
+    public JSONObject devices(@PathVariable Long serialNumber, @PathVariable Integer pageNumber, @PathVariable Integer pageSize) {
         JSONObject resultJson = new JSONObject();
         if (pageNumber == null || pageSize == null) {
-            resultJson.put("state", 0);
-            resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
+            pageNumber = 1;
+            pageSize = 5;
+//            resultJson.put("state", 0);
+//            resultJson.put("message", FailureMessageEnum.INVALID_PARAM);
         } else {
             try {
-                DeviceGroup deviceGroup = deviceGroupRepository.findOne(serialNumber);
+                DeviceGroup deviceGroup = deviceGroupRepository.findTopBySerialNumber(serialNumber);
                 if (deviceGroup != null) {
 
-                    List<Device> devicePage = deviceRepository.findAllByDeviceGroup(deviceGroup);
+                    List<Device> devicePage = deviceRepository.findAllByDeviceGroup(deviceGroup, new PageRequest(pageNumber, pageSize));
                     if (devicePage != null) {
                         resultJson.put("state", 1);
                         resultJson.put("data", devicePage);
@@ -179,8 +181,15 @@ public class DeviceGroupController {
                         resultJson.put("message", FailureMessageEnum.EMPTY_DATA_SET);
                     }
                 } else {
-                    resultJson.put("state", 0);
-                    resultJson.put("message", "请求必须附带分组序列号!");
+                    /**
+                     * 返回默认分组
+                     */
+                    DeviceGroup defaultGroup = deviceGroupRepository.findTopByName("DEFAULT_GROUP");
+                    List<Device> devices = deviceRepository.findAllByDeviceGroup(defaultGroup);
+
+                    resultJson.put("state", 1);
+                    resultJson.put("data", devices);
+                    resultJson.put("message", "默认分组!");
                 }
 
 

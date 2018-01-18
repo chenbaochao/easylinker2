@@ -6,6 +6,8 @@ import com.easylinker.iot.v2.model.user.AppUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -23,7 +25,19 @@ public interface DeviceRepository extends JpaRepository<Device, String> {
 
     List<Device> findAllByDeviceGroup(DeviceGroup deviceGroup);
 
+    List<Device> findAllByDeviceGroup(DeviceGroup deviceGroup, Pageable pageable);
+
+
     Device findTopByDeviceCode(String deviceCode);
 
+    Integer countAllByAppUser(AppUser appUser);
+
+    @Query(" select count (id) from Device where is_online =1 and appUser=:appUser")
+
+    Integer countOnlineByAppUser(@Param(value = "appUser") AppUser appUser);
+
+    @Query(" select count (id) from Device where is_online =0 and appUser=:appUser")
+
+    Integer countOfflineByAppUser(@Param(value = "appUser") AppUser appUser);
 
 }
