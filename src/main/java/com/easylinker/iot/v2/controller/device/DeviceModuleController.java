@@ -82,6 +82,7 @@ public class DeviceModuleController {
                     return ReturnResult.returnResult(1, moduleTag.toString());
 
                 case STRING:
+
                     return ReturnResult.returnResult(1, moduleTag.toString());
 
                 case SWITCHER:
