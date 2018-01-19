@@ -33,11 +33,13 @@ public interface DeviceRepository extends JpaRepository<Device, String> {
     Integer countAllByAppUser(AppUser appUser);
 
     @Query(" select count (id) from Device where is_online =1 and appUser=:appUser")
-
     Integer countOnlineByAppUser(@Param(value = "appUser") AppUser appUser);
 
     @Query(" select count (id) from Device where is_online =0 and appUser=:appUser")
-
     Integer countOfflineByAppUser(@Param(value = "appUser") AppUser appUser);
+
+    Boolean findByAppUserAndIsOnlineTrue(AppUser appUser);
+
+    Boolean findByAppUserAndIsOnlineFalse(AppUser appUser);
 
 }
