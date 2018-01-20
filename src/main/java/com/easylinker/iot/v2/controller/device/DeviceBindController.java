@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by wwhai on 2018/1/11.
  * 用来绑定设备
@@ -32,32 +29,43 @@ public class DeviceBindController {
     /**
      * 绑定设备
      */
-    @ApiOperation(value = "绑定设备", notes = "绑定设备", httpMethod = "POST")
+    @ApiOperation(value = "绑定1个设备", notes = "绑定1个设备", httpMethod = "POST")
     @RequestMapping(value = "/device/bind")
     public JSONObject bindDevice(@RequestBody JSONObject body) {
         /**
-         * 绑定设备的时候需要提供设备的分许
+         * 绑定设备的时候需要提供设备的
          */
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String deviceCode = body.getString("deviceCode");
+        String deviceName = body.getString("name");
+        String deviceDescribe = body.getString("deviceDescribe");
         Device device = deviceRepository.findTopByDeviceCode(deviceCode);
         if (device != null) {
             /**
-             * 设备存在情况下  还要考虑  是否已经被绑定
-             *
+             * 这里是判断 如果设备存在
+             * 再来判断是否已经绑定过了
+             * null 表示  设备的用户是空的  没有绑定
+             * 反之就绑定过了
              */
-            List<Device> deviceList = new ArrayList<>();
-            deviceList.add(device);
-            if (appUserRepository.findTopByDeviceList(deviceList) != null) {
+            if (device.getAppUser() == null) {
+                device.setDeviceName(deviceName);
+                device.setDeviceDescribe(deviceDescribe);
                 device.setAppUser(appUser);
+                /**
+                 * 分组
+                 */
+//                DeviceGroup deviceGroup=new DeviceGroup();
+//                deviceGroup.setName("DEFAULT_GROUP");
+//                deviceGroup.setAppUser(appUser);
+//                device.setDeviceGroup(deviceGroup);
                 deviceRepository.save(device);
                 return ReturnResult.returnResult(1, "设备绑定成功!");
             } else {
                 return ReturnResult.returnResult(0, "设备已经绑定到其他账户!");
             }
-
         } else {
             return ReturnResult.returnResult(0, "设备不存在!");
+
         }
     }
 
