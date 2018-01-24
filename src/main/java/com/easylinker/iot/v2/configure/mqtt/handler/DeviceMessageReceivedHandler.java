@@ -49,7 +49,7 @@ public class DeviceMessageReceivedHandler implements MessageHandler {
             JSONObject payloadJson = JSONObject.parseObject(message.getPayload().toString());
 
             /**
-             * device/publish/{openId} 设备发过来的消息来自这个主题
+             * device/publisher/{openId} 设备发过来的消息来自这个主题
              */
             if (message.getHeaders().get("mqtt_topic").toString().startsWith("device/publisher/")) {
                 String deviceMessage = payloadJson.getString("message");
