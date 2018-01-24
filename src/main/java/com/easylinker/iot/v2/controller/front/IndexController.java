@@ -24,7 +24,7 @@ public class IndexController {
         httpServletResponse.setCharacterEncoding("utf-8");
         httpServletResponse.setContentType("text/html");
         httpServletResponse.getWriter().write("<h1>运行成功</h1><a href=\"http://www.easylinker.xyz\">[社区]</a><br>" +
-                "<a href=\"http://www.easylinker.xyz:1314/index\">[文档]</a>");
+                "<a href=\"http://www.easylinker.xyz:1314/docs.html\">[文档]</a>");
         httpServletResponse.getWriter().flush();
 
     }
