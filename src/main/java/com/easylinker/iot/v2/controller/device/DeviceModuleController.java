@@ -52,82 +52,82 @@ public class DeviceModuleController {
     }
 
 
-    @ApiOperation(value = "提交前端tag", notes = "提交前端功能列表的tag", httpMethod = "GET")
-    @RequestMapping(value = "/user/device/data/{openId}/{moduleTag}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
-    public JSONObject getDataByModuleTag(
-            @PathVariable String openId,
-            @PathVariable ModuleTag moduleTag,
-            @PathVariable Integer pageNumber,
-            @PathVariable Integer pageSize) {
-        Device device = deviceRepository.findTopByOpenId(openId);
-        if (device != null) {
-            List<DeviceData> deviceDataList = deviceDataRepository.findAllByDevice(
-                    device,
-                    new PageRequest(pageNumber, pageSize)).getContent();
-
-            switch (moduleTag) {
-                case HUMIDITY:
-                    return ReturnResult.returnResultWithData(1, "查询成功", getDataListByTag(ModuleTag.HUMIDITY, deviceDataList));
-                case PRESSURE:
-                    return ReturnResult.returnResult(1, moduleTag.toString());
-
-                case TEMPERATURE:
-                    return ReturnResult.returnResultWithData(1, "查询成功", getDataListByTag(ModuleTag.TEMPERATURE, deviceDataList));
-
-                case VALUE:
-                    return ReturnResult.returnResult(1, moduleTag.toString());
-
-                case FILE:
-                    return ReturnResult.returnResult(1, moduleTag.toString());
-                case LOCATION:
-                    return ReturnResult.returnResult(1, moduleTag.toString());
-
-                case STRING:
-
-                    return ReturnResult.returnResult(1, moduleTag.toString());
-
-                case SWITCHER:
-                    return ReturnResult.returnResult(1, moduleTag.toString());
-
-                default:
-                    return ReturnResult.returnResult(1, moduleTag.toString());
-            }
-        } else {
-            return ReturnResult.returnResult(0, "设备不存在");
-        }
-    }
-
-
-    /**
-     * @param moduleTag
-     * @param deviceDataList
-     * @return {
-     * "id": "51b1e883-58ea-4450-b4f6-c4292cf2da4f",
-     * "isDelete": 0,
-     * "createTime": 1516189736000,
-     * "data": "{\"temperature\":18,\"humidity\":67}",
-     * "unit": "C"
-     * },
-     */
-    public List<Object> getDataListByTag(ModuleTag moduleTag, List<DeviceData> deviceDataList) {
-        List<Object> dataList = new ArrayList<>();
-        try {
-            for (DeviceData deviceData : deviceDataList) {
-                JSONObject dataJson = JSONObject.parseObject(deviceData.getData());
-                Float data = dataJson.getFloat(moduleTag.toString());
-                Date createTime = deviceData.getCreateTime();
-                dataList.add(createTime);
-                dataList.add(data);
-            }
-        } catch (Exception e) {
-            logger.error("解析Tag的时候出错了");
-        }
-        return dataList;
-    }
+//    @ApiOperation(value = "提交前端tag", notes = "提交前端功能列表的tag", httpMethod = "GET")
+//    @RequestMapping(value = "/user/device/data/{openId}/{moduleTag}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
+//    public JSONObject getDataByModuleTag(
+//            @PathVariable String openId,
+//            @PathVariable ModuleTag moduleTag,
+//            @PathVariable Integer pageNumber,
+//            @PathVariable Integer pageSize) {
+//        Device device = deviceRepository.findTopByOpenId(openId);
+//        if (device != null) {
+//            List<DeviceData> deviceDataList = deviceDataRepository.findAllByDevice(
+//                    device,
+//                    new PageRequest(pageNumber, pageSize)).getContent();
+//
+//            switch (moduleTag) {
+//                case HUMIDITY:
+//                    return ReturnResult.returnResultWithData(1, "查询成功", getDataListByTag(ModuleTag.HUMIDITY, deviceDataList));
+//                case PRESSURE:
+//                    return ReturnResult.returnResult(1, moduleTag.toString());
+//
+//                case TEMPERATURE:
+//                    return ReturnResult.returnResultWithData(1, "查询成功", getDataListByTag(ModuleTag.TEMPERATURE, deviceDataList));
+//
+//                case VALUE:
+//                    return ReturnResult.returnResult(1, moduleTag.toString());
+//
+//                case FILE:
+//                    return ReturnResult.returnResult(1, moduleTag.toString());
+//                case LOCATION:
+//                    return ReturnResult.returnResult(1, moduleTag.toString());
+//
+//                case STRING:
+//
+//                    return ReturnResult.returnResult(1, moduleTag.toString());
+//
+//                case SWITCHER:
+//                    return ReturnResult.returnResult(1, moduleTag.toString());
+//
+//                default:
+//                    return ReturnResult.returnResult(1, moduleTag.toString());
+//            }
+//        } else {
+//            return ReturnResult.returnResult(0, "设备不存在");
+//        }
+//    }
+//
+//
+//    /**
+//     * @param moduleTag
+//     * @param deviceDataList
+//     * @return {
+//     * "id": "51b1e883-58ea-4450-b4f6-c4292cf2da4f",
+//     * "isDelete": 0,
+//     * "createTime": 1516189736000,
+//     * "data": "{\"temperature\":18,\"humidity\":67}",
+//     * "unit": "C"
+//     * },
+//     */
+//    public List<Object> getDataListByTag(ModuleTag moduleTag, List<DeviceData> deviceDataList) {
+//        List<Object> dataList = new ArrayList<>();
+//        try {
+//            for (DeviceData deviceData : deviceDataList) {
+//                JSONObject dataJson = JSONObject.parseObject(deviceData.getData());
+//                Float data = dataJson.getFloat(moduleTag.toString());
+//                Date createTime = deviceData.getCreateTime();
+//                dataList.add(createTime);
+//                dataList.add(data);
+//            }
+//        } catch (Exception e) {
+//            logger.error("解析Tag的时候出错了");
+//        }
+//        return dataList;
+//    }
 
     @ApiOperation(value = "获取板子提交的数据", notes = "获取板子提交的数据", httpMethod = "GET")
 
-    @RequestMapping(value = "/user/sensor/board/data/{openId}/{begin}/{end}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
+    @RequestMapping(value = "/sensor/board/data/{openId}/{begin}/{end}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
     private JSONObject getSensorBoardData(
             @PathVariable String openId,
             @PathVariable Long begin,
