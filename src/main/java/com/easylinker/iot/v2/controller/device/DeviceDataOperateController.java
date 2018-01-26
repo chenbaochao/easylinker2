@@ -27,6 +27,20 @@ public class DeviceDataOperateController {
     @Autowired
     DeviceRepository deviceRepository;
 
+    /**
+     * 目前是先获取
+     * 温度
+     * 湿度
+     * 压强
+     * CO2浓度
+     * PM25
+     *
+     * @param openId
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+
     @RequestMapping(value = "/user/device/data/{openId}/{pageNumber}/{pageSize}")
     public JSONObject deviceData(@PathVariable String openId,
                                  @PathVariable Integer pageNumber,

@@ -1,5 +1,6 @@
 package com.easylinker.iot.v2.controller.device;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.easylinker.iot.v2.constants.SuccessMessageEnum;
 import com.easylinker.iot.v2.controller.device.ui.enums.ModuleTag;
@@ -123,4 +124,74 @@ public class DeviceModuleController {
         }
         return dataList;
     }
+
+    @ApiOperation(value = "获取板子提交的数据", notes = "获取板子提交的数据", httpMethod = "GET")
+
+    @RequestMapping(value = "/user/sensor/board/data/{openId}/{begin}/{end}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
+    private JSONObject getSensorBoardData(
+            @PathVariable String openId,
+            @PathVariable Long begin,
+            @PathVariable Long end,
+            @PathVariable Integer pageNumber,
+            @PathVariable Integer pageSize) {
+        JSONObject returnJson = new JSONObject();
+
+        Device device = deviceRepository.findTopByOpenId(openId);
+        if (device != null) {
+            List<DeviceData> deviceDataList = deviceDataRepository.findAllByDeviceAndCreateTimeBetween(
+                    device,
+                    new Date(begin),
+                    new Date(end),
+                    new PageRequest(pageNumber, pageSize)).getContent();
+            /**
+             *
+             HUMIDITY:
+             PRESSURE:
+             TEMPERATURE:
+             VALUE:
+             FILE:
+             LOCATION:
+             STRING:
+             SWITCHER:
+             */
+            JSONArray dateArray = new JSONArray();
+            JSONArray HUMIDITY_arrays = new JSONArray();
+            JSONArray PRESSURE_arrays = new JSONArray();
+            JSONArray TEMPERATURE_arrays = new JSONArray();
+            JSONArray VALUE_arrays = new JSONArray();
+            JSONArray FILE_arrays = new JSONArray();
+            JSONArray LOCATION_arrays = new JSONArray();
+            JSONArray STRING_arrays = new JSONArray();
+            JSONArray SWITCHER_arrays = new JSONArray();
+
+
+            for (DeviceData deviceData : deviceDataList) {
+                JSONObject dataJson = JSONObject.parseObject(deviceData.getData());
+                dateArray.add(deviceData.getCreateTime());
+                HUMIDITY_arrays.add(dataJson.getString("HUMIDITY"));
+                TEMPERATURE_arrays.add(dataJson.getString("TEMPERATURE"));
+                PRESSURE_arrays.add(dataJson.getString("PRESSURE"));
+                VALUE_arrays.add(dataJson.getString("VALUE"));
+                FILE_arrays.add(dataJson.getString("FILE"));
+                LOCATION_arrays.add(dataJson.getString("LOCATION"));
+                STRING_arrays.add(dataJson.getString("STRING"));
+                SWITCHER_arrays.add(dataJson.getString("SWITCHER"));
+
+            }
+            returnJson.put("date", dateArray);
+            returnJson.put("HUMIDITY", HUMIDITY_arrays);
+            returnJson.put("TEMPERATURE", TEMPERATURE_arrays);
+            returnJson.put("PRESSURE", PRESSURE_arrays);
+            returnJson.put("TEMPERATURE", TEMPERATURE_arrays);
+            returnJson.put("VALUE", VALUE_arrays);
+            returnJson.put("FILE", FILE_arrays);
+            returnJson.put("LOCATION", LOCATION_arrays);
+            returnJson.put("STRING", STRING_arrays);
+            returnJson.put("SWITCHER", SWITCHER_arrays);
+        }
+
+        return ReturnResult.returnResultWithData(1, SuccessMessageEnum.OPERATE_SUCCESS.toString(), returnJson);
+
+    }
+
 }
