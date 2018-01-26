@@ -128,7 +128,7 @@ public class DeviceModuleController {
     @ApiOperation(value = "获取板子提交的数据", notes = "获取板子提交的数据", httpMethod = "GET")
 
     @RequestMapping(value = "/sensor/board/data/{openId}/{begin}/{end}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
-    private JSONObject getSensorBoardData(
+    public JSONObject getSensorBoardData(
             @PathVariable String openId,
             @PathVariable Long begin,
             @PathVariable Long end,
